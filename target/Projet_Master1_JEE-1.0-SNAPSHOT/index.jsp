@@ -6,17 +6,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
+<t:page title="cc lé gens"/>
+
 <html>
-  <head>
-    <title>Covid app</title>
-    <meta charset="UTF-8"/>
+  <jsp:include page="includer.jsp" />
 
-    <link href="resources/css/tailwind_css/tailwind.css" rel="stylesheet">
-  </head>
+  <t:page title="index">
+    <p class="dark:text-white"> This is just a index page </p>
+  </t:page>
 
-  <body class="dark:bg-gray-500">
-    <div id="root" class="m-auto text-center">
-      <p class="dark:text-white"> This is just a index page </p>
-    </div>
-  </body>
 </html>
