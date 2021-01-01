@@ -11,7 +11,7 @@
   <head>
     <title>${param.title}</title>
     <link href="resources/logo.webp" rel="icon">
-    <link href="resources/css/tailwind_css/tailwind.css" rel="stylesheet">
+    <link href="resources/css/output.css" rel="stylesheet">
     <link href="resources/css/page.css" rel="stylesheet">
   </head>
 </html>

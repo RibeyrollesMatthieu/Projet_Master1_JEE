@@ -2,7 +2,7 @@
 
 <%@attribute name="id" required="true" %>
 <%@attribute name="type" required="true" %>
-<%@attribute name="placeholder" required="true" %>
+<%@attribute name="placeholder" required="false" %>
 
 <html>
   <input
