@@ -6,15 +6,5 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:page title="cc lé gens"/>
-
-<html>
-  <jsp:include page="includer.jsp" />
-
-  <t:page title="index">
-    <p class="dark:text-white"> This is just a index page </p>
-  </t:page>
-
-</html>
+<jsp:include page="resources/views/pages/home.jsp" />

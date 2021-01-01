@@ -1,16 +1,15 @@
 <%@tag description="Base template for all the app pages" pageEncoding="UTF-8" %>
 
-<%@attribute name="title" required="true" %>
 <%@attribute name="header" fragment="true" %>
 <%@attribute name="footer" fragment="true" %>
 
 <html>
-  <body>
+  <body class="dark:bg-gray-800">
     <header>
       <jsp:invoke fragment="header" />
     </header>
 
-    <div id="root" class="dark:bg-gray-500">
+    <div id="root">
       <jsp:doBody />
     </div>
 

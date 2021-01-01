@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
       sqlException.printStackTrace();
     }
 
-    req.getRequestDispatcher("resources/views/login.jsp").forward(req, resp);
+    req.getRequestDispatcher("resources/views/connection/login.jsp").forward(req, resp);
   }
    
    /*------------------------------------------------------------------
