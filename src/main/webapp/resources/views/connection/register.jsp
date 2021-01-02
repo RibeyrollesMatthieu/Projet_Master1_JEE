@@ -22,7 +22,8 @@
       <p class="p-5 text-xl"> Create your account and help us prevent the covid spreading! </p>
 
 
-      <form id="register-form" class="rounded shadow shadow-white p-5 bg-gray-200 dark:bg-gray-700 text-black">
+      <form id="register-form" class="rounded shadow shadow-white p-5 bg-gray-200 dark:bg-gray-700 text-black"
+            action="" method="post">
         <div class="mb-4"> <t:connection_input id="firstname" type="text" placeholder="Firstname" /> </div>
 
         <div class="mb-4"> <t:connection_input id="lastname" type="text" placeholder="Lastname" /> </div>

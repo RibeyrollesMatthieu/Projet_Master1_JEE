@@ -2,6 +2,7 @@
 
 <%@attribute name="id" required="true" %>
 <%@attribute name="type" required="true" %>
+<%@attribute name="autofocus" required="false" %>
 <%@attribute name="placeholder" required="false" %>
 
 <html>
@@ -17,6 +18,7 @@
       shadow"
 
     id=${id}
+    name=${id}
     type=${type}
     placeholder=${placeholder}
   >

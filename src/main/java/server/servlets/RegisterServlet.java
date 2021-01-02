@@ -1,5 +1,6 @@
 package server.servlets;
 
+import server.database.Hashing;
 import server.database.SQLConnector;
 
 import javax.servlet.ServletException;
@@ -7,15 +8,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Enumeration;
+import java.util.regex.Pattern;
 
 /**
  * @author Ribeyrolles Matthieu
  * 29/12/2020, 23:16
  */
 public class RegisterServlet extends HttpServlet {
+
   /*------------------------------------------------------------------
                               Methods
    ------------------------------------------------------------------*/
@@ -23,37 +26,66 @@ public class RegisterServlet extends HttpServlet {
   // getters
   // setters
   // private
-  // public
-  @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+  private boolean isEmailGood(String email) {
+    String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+      "[a-zA-Z0-9_+&*-]+)*@" +
+      "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+      "A-Z]{2,7}$";
+
+    Pattern pat = Pattern.compile(emailRegex);
+    if (email == null) return false;
+    return pat.matcher(email).matches();
+  }
+
+  private boolean isRegisteringOk(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    Enumeration<String> params = req.getParameterNames();
+    while (params.hasMoreElements()) {
+      String param = params.nextElement();
+      if (req.getParameter(param).trim().length() == 0 || req.getParameter(param) == null) return false;
+    }
+
+    if (! req.getParameter("password").equals(req.getParameter("confirm-password"))) return false;
+    if (! isEmailGood(req.getParameter("email"))) return false;
+
+    return true;
+  }
+
+  private void createAccount(String email, String firstname, String lastname, String password, String bdate) throws SQLException {
     SQLConnector connector = new SQLConnector();
     connector.connect("projet_master1_jee", "root", "");
 
-    ResultSet resultSet = connector.doRequest("SELECT * FROM users");
+    Hashing hashing = new Hashing();
 
-    try {
-      ResultSetMetaData metaData = resultSet.getMetaData();
-      int colsNumber = metaData.getColumnCount();
+    connector.doRequest(String.format("INSERT INTO users VALUES('%s','%s','%s','%s','%s');", email, firstname, lastname, hashing.hash(password), bdate), true);
+    System.out.print("Successfully created new user\n");
+  }
 
-      while(resultSet.next()) {
-        for (int i = 1; i <= colsNumber; i++) {
-          if (i > 1) System.out.println(", ");
-          String colValue = resultSet.getString(i);
-          System.out.printf("%s: %s\n", metaData.getColumnName(i), colValue);
-        }
-      }
+  // public
 
-
-    } catch (SQLException sqlException) {
-      sqlException.printStackTrace();
-    }
-
-    req.getRequestDispatcher("resources/views/connection/register.jsp").forward(req, resp);
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    if (Boolean.parseBoolean(String.valueOf(req.getSession().getAttribute("logged")))) req.getRequestDispatcher("/").forward(req, resp);
+    else req.getRequestDispatcher("resources/views/connection/register.jsp").forward(req, resp);
   }
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    
+    if (this.isRegisteringOk(req, resp)) {
+      try {
+        createAccount(
+          req.getParameter("email"),
+          req.getParameter("firstname"),
+          req.getParameter("lastname"),
+          req.getParameter("password"),
+          req.getParameter("date")
+        );
+        req.getSession().setAttribute("logged", true);
+        resp.sendRedirect(req.getRequestURI().replace("register", ""));
+      } catch (SQLException sqlException) {
+        System.err.println("Unable to create account");
+        resp.sendRedirect(req.getRequestURI());
+      }
+    }
   }
 
   /*------------------------------------------------------------------

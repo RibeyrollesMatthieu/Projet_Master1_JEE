@@ -20,7 +20,7 @@ public class SQLConnector extends DbConnector {
   // public
 
   @Override
-  public ResultSet doRequest(String query) {
+  public ResultSet doRequest(String query, boolean changingValues) throws SQLException {
     ResultSet resultSet = null;
     Connection connection = null;
 
@@ -30,13 +30,11 @@ public class SQLConnector extends DbConnector {
       System.err.println("Cannot do the request cause a connection has not been set yet");
     }
 
-    try {
-      assert connection != null : "Cannot execute he query cause connection is null.";
-      Statement statement = connection.createStatement();
-      resultSet = statement.executeQuery(query);
-    } catch (SQLException sqlException) {
-      System.err.println(sqlException.getMessage());
-    }
+    assert connection != null : "Cannot execute he query cause connection is null.";
+    Statement statement = connection.createStatement();
+
+    if (changingValues) statement.executeUpdate(query);
+    else resultSet = statement.executeQuery(query);
 
     return resultSet;
   }
