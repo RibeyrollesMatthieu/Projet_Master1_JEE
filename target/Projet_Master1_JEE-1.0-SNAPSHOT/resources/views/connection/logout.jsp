@@ -11,6 +11,6 @@
     <title> Logout </title>
   </head>
   <body>
-    <jsp:include page="login.jsp" />
+    <jsp:include page="register.jsp" />
   </body>
 </html>

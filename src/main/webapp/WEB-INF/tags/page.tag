@@ -4,7 +4,7 @@
 <%@attribute name="footer" fragment="true" %>
 
 <html>
-  <body class="dark:bg-gray-800">
+  <body class="bg-gray-50 dark:bg-gray-800 dark:text-white">
     <header>
       <jsp:invoke fragment="header" />
     </header>
