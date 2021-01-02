@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <body>
-    HEader, here i am
-  </body>
+  <nav class="flex items-center justify-between">
+    <h2 class="text-gray-200 font-bold text-2x1"></h2>
+  </nav>
 </html>

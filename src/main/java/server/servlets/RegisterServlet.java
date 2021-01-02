@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
 
@@ -64,7 +63,7 @@ public class RegisterServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-    if (Boolean.parseBoolean(String.valueOf(req.getSession().getAttribute("logged")))) req.getRequestDispatcher("/").forward(req, resp);
+    if (Boolean.parseBoolean((req.getSession().getAttribute("logged").toString()))) resp.sendRedirect(req.getRequestURI().replace("register", ""));
     else req.getRequestDispatcher("resources/views/connection/register.jsp").forward(req, resp);
   }
 
@@ -85,6 +84,8 @@ public class RegisterServlet extends HttpServlet {
         System.err.println("Unable to create account");
         resp.sendRedirect(req.getRequestURI());
       }
+    } else {
+      req.getRequestDispatcher("resources/views/connection/register.jsp").forward(req, resp);
     }
   }
 

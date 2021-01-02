@@ -18,8 +18,7 @@
     <div  class="login-form-container text-center w-2/3 md:w-1/3 min-w-max min-h-max m-auto"
           style="position:absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
 
-      <p class="title text-5xl md:text-7xl lg:text-8xl font-bold p-5 text-yellow-600 noselect"> Covid Tracker </p>
-      <p class="p-5 text-xl"> Create your account and help us prevent the covid spreading! </p>
+      <p class="p-5 text-3xl"> Create your account and help us prevent the covid spreading! </p>
 
 
       <form id="register-form" class="rounded shadow shadow-white p-5 bg-gray-200 dark:bg-gray-700 text-black"

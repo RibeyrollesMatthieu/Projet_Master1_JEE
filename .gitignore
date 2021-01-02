@@ -2,3 +2,6 @@
 package-lock.json
 *.class
 node_modules/*
+.idea/libraries/jstl_1_2.xml
+.idea/libraries/jstl_1_2.xml
+Projet_Master1_JEE.iml
