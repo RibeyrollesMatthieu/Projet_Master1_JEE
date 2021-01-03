@@ -49,6 +49,17 @@
   </servlet-mapping>
 
 
+  <servlet>
+    <servlet-name>servlets.LogoutServlet</servlet-name>
+    <servlet-class>server.servlets.LogoutServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>servlets.LogoutServlet</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+
+
   <error-page>
     <error-code>404</error-code>
     <location>/resources/views/pages/error.jsp</location>
