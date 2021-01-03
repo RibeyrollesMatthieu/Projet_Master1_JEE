@@ -16,7 +16,7 @@ import java.sql.SQLException;
  * @author Ribeyrolles Matthieu
  * 03/01/2021, 21:14
  */
-public class LoginServlet extends HttpServlet implements FormsMethods {
+public class LoginServlet extends HttpServlet implements FormsMethods, ServletMethods {
   /*------------------------------------------------------------------
                               Methods
    ------------------------------------------------------------------*/
@@ -58,6 +58,7 @@ public class LoginServlet extends HttpServlet implements FormsMethods {
 
           req.getSession().setAttribute("id", set.getInt("id"));
           req.getSession().setAttribute("logged", true);
+          this.createUserBean(req);
 
           resp.sendRedirect(req.getContextPath());
         } else {

@@ -16,7 +16,7 @@ import java.sql.SQLException;
  * @author Ribeyrolles Matthieu
  * 29/12/2020, 23:16
  */
-public class RegisterServlet extends HttpServlet implements FormsMethods {
+public class RegisterServlet extends HttpServlet implements FormsMethods, ServletMethods {
 
   /*------------------------------------------------------------------
                               Methods
@@ -44,27 +44,6 @@ public class RegisterServlet extends HttpServlet implements FormsMethods {
     set.next();
 
     return set.getInt(1);
-  }
-
-  private void createUserBean(HttpServletRequest req) {
-    SQLConnector connector = new SQLConnector();
-    connector.connect("projet_master1_jee", "root", "");
-
-    try {
-      final ResultSet rs = connector.getUser((Integer) req.getSession().getAttribute("id"));
-      UserBean userBean = new UserBean();
-
-      rs.next();
-      userBean.setEmail(rs.getString("email"));
-      userBean.setFirstname(rs.getString("firstname"));
-      userBean.setLastname(rs.getString("lastname"));
-      userBean.setBdate(rs.getDate("birthdate"));
-      userBean.setPassword(rs.getString("password"));
-
-      req.getSession().setAttribute("user", userBean);
-    } catch (Exception e) {
-      System.err.println("Unable to create user bean");
-    }
   }
 
   // public
