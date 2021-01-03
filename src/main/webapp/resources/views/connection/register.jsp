@@ -15,29 +15,30 @@
   <%--  TODO: change display of register form because it is fixed on center if the screen, whenr resizing height, title and form fuse
   --%>
   <t:page>
-    <div  class="login-form-container text-center w-2/3 md:w-1/3 min-w-max min-h-max m-auto"
-          style="position:absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <div class="text-center w-3/4 m-auto">
+      <h1 class="title text-7xl uppercase text-yellow-700 my-24">Covid Tracker</h1>
 
-      <p class="p-5 text-3xl"> Create your account and help us prevent the covid spreading! </p>
+      <div id="content" class="flex flex-wrap content-center justify-between items-center mt-9 space-x-3">
+        <h2 class="p-5 text-3xl flex-1 w-full"> Create your account and help us prevent the covid spreading! </h2>
 
+        <form id="register-form" class="flex-1 rounded shadow shadow-white p-5 bg-gray-200 dark:bg-gray-700 text-black"
+              action="" method="post">
+          <div class="mb-4"> <t:connection_input id="firstname" type="text" placeholder="Firstname" autofocus='true'/> </div>
 
-      <form id="register-form" class="rounded shadow shadow-white p-5 bg-gray-200 dark:bg-gray-700 text-black"
-            action="" method="post">
-        <div class="mb-4"> <t:connection_input id="firstname" type="text" placeholder="Firstname" /> </div>
+          <div class="mb-4"> <t:connection_input id="lastname" type="text" placeholder="Lastname" /> </div>
 
-        <div class="mb-4"> <t:connection_input id="lastname" type="text" placeholder="Lastname" /> </div>
+          <div class="mb-4"> <t:connection_input id="password" type="password" placeholder="Password" /> </div>
+          <div class="mb-4"> <t:connection_input id="confirm-password" type="password" placeholder="Confirm password" /> </div>
 
-        <div class="mb-4"> <t:connection_input id="password" type="password" placeholder="Password" /> </div>
-        <div class="mb-4"> <t:connection_input id="confirm-password" type="password" placeholder="Confirm password" /> </div>
+          <div class="mb-4"> <t:connection_input id="email" type="email" placeholder="Email address" /> </div>
 
-        <div class="mb-4"> <t:connection_input id="email" type="email" placeholder="Email address" /> </div>
+          <div class="mb-4"> <t:connection_input id="date" type="text" placeholder="Birthdate" /> </div>
 
-        <div class="mb-4"> <t:connection_input id="date" type="text" placeholder="Birthdate" /> </div>
-
-        <button id="register-submit-button" class="bg-yellow-600 font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed text-white" type="submit">
-          Create account
-        </button>
-      </form>
+          <button id="register-submit-button" class="bg-yellow-600 font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed text-white" type="submit">
+            Create account
+          </button>
+        </form>
+      </div>
     </div>
 
     <script>

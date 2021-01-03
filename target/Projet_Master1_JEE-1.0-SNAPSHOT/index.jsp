@@ -7,4 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<jsp:include page="resources/views/pages/home.jsp" />
+<%
+  response.sendRedirect(request.getRequestURL() + "home");
+%>

@@ -22,8 +22,10 @@ public class HomeServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    if (! Boolean.parseBoolean(req.getSession().getAttribute("logged").toString())) resp.sendRedirect(req.getRequestURI().replace("register", ""));
-    else req.getRequestDispatcher("resources/views/pages/home.jsp").forward(req, resp);
+    final Object loggedAttribute = req.getSession().getAttribute("logged");
+
+    if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) req.getRequestDispatcher("resources/views/pages/home.jsp").forward(req, resp);
+    else resp.sendRedirect("register");
   }
 
   @Override

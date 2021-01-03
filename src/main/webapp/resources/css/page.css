@@ -4,18 +4,18 @@
 }
 
 html, body {
-  height: 100vh !important;
   font-family: Oswald;
 }
 
 .title {
   font-variation-settings: 'wght' 100, 'wdth' 85;
-  animation: breathe 4000ms 1 forwards;
+  animation: breathe 10000ms infinite forwards;
   animation-delay: 500ms;
 }
 
 @keyframes breathe {
-  100% { font-variation-settings: 'wght' 700, 'wdth' 100; }
+  60% { font-variation-settings: 'wght' 700, 'wdth' 100; }
+  100% { font-variation-settings: 'wght' 100, 'wdth' 85; }
 }
 
 .noselect {

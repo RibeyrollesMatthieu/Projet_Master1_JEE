@@ -15,11 +15,14 @@
       rounded
       p-2
       appearance-none
-      shadow"
+      shadow
+      w-auto
+      lg:w-2/5"
 
     id=${id}
     name=${id}
     type=${type}
     placeholder=${placeholder}
+    autofocus=${autofocus}
   >
 </html>

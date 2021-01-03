@@ -14,6 +14,20 @@
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
 
+
+
+  <servlet>
+    <servlet-name>servlets.HomeServlet</servlet-name>
+    <servlet-class>server.servlets.HomeServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>servlets.HomeServlet</servlet-name>
+    <url-pattern>/home</url-pattern>
+  </servlet-mapping>
+
+
+
   <error-page>
     <error-code>404</error-code>
     <location>/resources/views/pages/error.jsp</location>
