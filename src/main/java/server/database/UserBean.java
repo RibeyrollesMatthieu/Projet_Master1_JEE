@@ -62,11 +62,22 @@ public class UserBean {
   // private
   // public
 
-  public UserBean() {
+  @Override
+  public String toString() {
+    return "UserBean{" +
+      "firstname='" + firstname + '\'' +
+      ", lastname='" + lastname + '\'' +
+      ", email='" + email + '\'' +
+      ", password='" + password + '\'' +
+      ", bdate=" + bdate +
+      '}';
   }
 
-   
+
    /*------------------------------------------------------------------
                             Constructors
    ------------------------------------------------------------------*/
+
+  public UserBean() {
+  }
 }

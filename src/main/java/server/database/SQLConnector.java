@@ -19,6 +19,18 @@ public class SQLConnector extends DbConnector {
   // private
   // public
 
+  //TODO set in his parent too
+  public ResultSet getUser(int id) throws SQLException {
+    SQLConnector connector = new SQLConnector();
+    connector.connect("projet_master1_jee", "root", "");
+
+    ResultSet set = connector.doRequest(
+      String.format("SELECT * FROM users WHERE id=%d;", id), false
+    );
+
+    return set;
+  }
+
   @Override
   public ResultSet doRequest(String query, boolean changingValues) throws SQLException {
     ResultSet resultSet = null;

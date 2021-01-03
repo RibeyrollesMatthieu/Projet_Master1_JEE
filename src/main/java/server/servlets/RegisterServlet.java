@@ -2,6 +2,7 @@ package server.servlets;
 
 import server.database.Hashing;
 import server.database.SQLConnector;
+import server.database.UserBean;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,14 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.regex.Pattern;
 
 /**
  * @author Ribeyrolles Matthieu
  * 29/12/2020, 23:16
  */
-public class RegisterServlet extends HttpServlet {
+public class RegisterServlet extends HttpServlet implements FormsMethods {
 
   /*------------------------------------------------------------------
                               Methods
@@ -26,29 +25,6 @@ public class RegisterServlet extends HttpServlet {
   // getters
   // setters
   // private
-  private boolean isEmailGood(String email) {
-    String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
-      "[a-zA-Z0-9_+&*-]+)*@" +
-      "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-      "A-Z]{2,7}$";
-
-    Pattern pat = Pattern.compile(emailRegex);
-    if (email == null) return false;
-    return pat.matcher(email).matches();
-  }
-
-  private boolean isRegisteringOk(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    Enumeration<String> params = req.getParameterNames();
-    while (params.hasMoreElements()) {
-      String param = params.nextElement();
-      if (req.getParameter(param).trim().length() == 0 || req.getParameter(param) == null) return false;
-    }
-
-    if (! req.getParameter("password").equals(req.getParameter("confirm-password"))) return false;
-    if (! isEmailGood(req.getParameter("email"))) return false;
-
-    return true;
-  }
 
   private int createAccount(String email, String firstname, String lastname, String password, String bdate) throws SQLException {
     SQLConnector connector = new SQLConnector();
@@ -72,6 +48,27 @@ public class RegisterServlet extends HttpServlet {
     return set.getInt(1);
   }
 
+  private void createUserBean(HttpServletRequest req) {
+    SQLConnector connector = new SQLConnector();
+    connector.connect("projet_master1_jee", "root", "");
+
+    try {
+      final ResultSet rs = connector.getUser((Integer) req.getSession().getAttribute("id"));
+      UserBean userBean = new UserBean();
+
+      rs.next();
+      userBean.setEmail(rs.getString("email"));
+      userBean.setFirstname(rs.getString("firstname"));
+      userBean.setLastname(rs.getString("lastname"));
+      userBean.setBdate(rs.getDate("birthdate"));
+      userBean.setPassword(rs.getString("password"));
+
+      req.getSession().setAttribute("user", userBean);
+    } catch (Exception e) {
+      System.err.println("Unable to create user bean");
+    }
+  }
+
   // public
 
   @Override
@@ -84,7 +81,7 @@ public class RegisterServlet extends HttpServlet {
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    if (this.isRegisteringOk(req, resp)) {
+    if (this.isFormCorrectlyWritten(req, resp)) {
       try {
         int id = createAccount(
           req.getParameter("email"),
@@ -95,6 +92,9 @@ public class RegisterServlet extends HttpServlet {
         );
         req.getSession().setAttribute("id", id);
         req.getSession().setAttribute("logged", true);
+
+        this.createUserBean(req);
+
         resp.sendRedirect(req.getContextPath());
       } catch (SQLException sqlException) {
         System.err.println("Unable to create account");
