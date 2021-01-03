@@ -12,8 +12,6 @@
 <html>
   <jsp:include page="../../../includer.jsp"> <jsp:param name="title" value="Register"/></jsp:include>
 
-  <%--  TODO: change display of register form because it is fixed on center if the screen, whenr resizing height, title and form fuse
-  --%>
   <t:page>
     <div class="text-center w-3/4 m-auto">
       <h1 class="title text-7xl uppercase text-yellow-700 my-24 noselect">Covid Tracker</h1>
@@ -31,9 +29,13 @@
           <div class="mb-4"> <t:input id="email" type="email" placeholder="Email address" /> </div>
           <div class="mb-4"> <t:input id="date" type="text" placeholder="Birthdate" /> </div>
 
-          <button id="register-submit-button" class="bg-yellow-600 font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed text-white" type="submit">
-            Create account
-          </button>
+          <div class="mb-4">
+            <button id="register-submit-button" class="bg-yellow-600 font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed text-white" type="submit">
+              Create account
+            </button>
+          </div>
+
+          <a class="hover:underline dark:text-white" href="${pageContext.request.contextPath}/login"> Or log in to your account </a>
         </form>
       </div>
     </div>

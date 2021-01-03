@@ -38,6 +38,16 @@
   </servlet-mapping>
 
 
+  <servlet>
+    <servlet-name>servlets.LoginServlet</servlet-name>
+    <servlet-class>server.servlets.LoginServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>servlets.LoginServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+
 
   <error-page>
     <error-code>404</error-code>
