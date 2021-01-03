@@ -12,6 +12,9 @@
   <jsp:include page="../../../includer.jsp"> <jsp:param name="title" value="Covid Tracker"/></jsp:include>
 
   <body>
+    <jsp:include page="../header.jsp" />
+
+
     <t:page>
       <p class="dark:text-white"> coucou </p>
     </t:page>

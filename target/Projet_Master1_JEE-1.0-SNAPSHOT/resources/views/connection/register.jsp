@@ -16,7 +16,7 @@
   --%>
   <t:page>
     <div class="text-center w-3/4 m-auto">
-      <h1 class="title text-7xl uppercase text-yellow-700 my-24">Covid Tracker</h1>
+      <h1 class="title text-7xl uppercase text-yellow-700 my-24 noselect">Covid Tracker</h1>
 
       <div id="content" class="flex flex-wrap content-center justify-between items-center mt-9 space-x-3">
         <h2 class="p-5 text-3xl flex-1 w-full"> Create your account and help us prevent the covid spreading! </h2>
