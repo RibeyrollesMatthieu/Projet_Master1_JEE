@@ -19,7 +19,10 @@
         <h1 class="text-7xl uppercase text-yellow-700 my-24 noselect"> My profile </h1>
 
         <div id="content" class="flex flex-wrap content-center justify-between items-center mt-9 space-x-3">
-          <h2 class="p-5 text-3xl flex-1 w-full"> You can change any information you'd like to! </h2>
+          <h2 class="p-5 text-3xl flex-1 w-full">
+            You can change any information you'd like to!
+            Or <a class="text-yellow-700 hover:underline" href="${pageContext.request.contextPath}/logout"> disconnect. </a>
+          </h2>
 
           <form id="register-form" class="flex-1 rounded shadow shadow-white p-5 bg-gray-200 dark:bg-gray-700 text-black"
                 action="" method="post">
