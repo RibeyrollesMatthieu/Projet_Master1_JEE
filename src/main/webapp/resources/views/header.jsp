@@ -9,17 +9,17 @@
 
 <html>
   <header>
-    <nav class="flex py-3 px-4 fixed top-0 left-0 right-0
-          bg-gray-300 dark:bg-gray-900
-          text-gray-800 dark:text-white">
+    <nav class="flex py-3 px-4 fixed top-0 left-0 right-0 items-baseline justify-between
+          bg-gray-300 dark:bg-gray-900">
+
+      <a href="${pageContext.request.contextPath}/profile"
+         class="text-xl text-bold hover:text-yellow-700"> Profile </a>
 
       <a href="${pageContext.request.contextPath}/"
          class="text-2xl text-bold"> Covid Tracker </a>
 
-      <i class="fas fa-users"></i>
-      <div>
-
-      </div>
+      <a href="${pageContext.request.contextPath}/friends"
+         class="text-xl text-bold hover:text-yellow-700"> Friends </a>
     </nav>
   </header>
 </html>

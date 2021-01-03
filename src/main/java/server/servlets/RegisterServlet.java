@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
@@ -49,14 +50,26 @@ public class RegisterServlet extends HttpServlet {
     return true;
   }
 
-  private void createAccount(String email, String firstname, String lastname, String password, String bdate) throws SQLException {
+  private int createAccount(String email, String firstname, String lastname, String password, String bdate) throws SQLException {
     SQLConnector connector = new SQLConnector();
     connector.connect("projet_master1_jee", "root", "");
 
     Hashing hashing = new Hashing();
 
-    connector.doRequest(String.format("INSERT INTO users VALUES('%s','%s','%s','%s','%s');", email, firstname, lastname, hashing.hash(password), bdate), true);
+    connector.doRequest(
+      String.format("INSERT INTO users(%s, %s, %s, %s, %s) VALUES('%s','%s','%s','%s','%s');",
+        "email", "firstname", "lastname", "password", "birthdate",
+        email, firstname, lastname, hashing.hash(password), bdate), true);
+
     System.out.print("Successfully created new user\n");
+
+    ResultSet set = connector.doRequest(
+      String.format("SELECT id FROM users WHERE email='%s';", email), false
+    );
+
+    set.next();
+
+    return set.getInt(1);
   }
 
   // public
@@ -73,15 +86,16 @@ public class RegisterServlet extends HttpServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     if (this.isRegisteringOk(req, resp)) {
       try {
-        createAccount(
+        int id = createAccount(
           req.getParameter("email"),
           req.getParameter("firstname"),
           req.getParameter("lastname"),
           req.getParameter("password"),
           req.getParameter("date")
         );
+        req.getSession().setAttribute("id", id);
         req.getSession().setAttribute("logged", true);
-        resp.sendRedirect(req.getRequestURI().replace("register", ""));
+        resp.sendRedirect(req.getContextPath());
       } catch (SQLException sqlException) {
         System.err.println("Unable to create account");
         resp.sendRedirect(req.getRequestURI());

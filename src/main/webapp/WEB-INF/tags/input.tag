@@ -1,11 +1,18 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@tag description="Template for a base connection form input" pageEncoding="UTF-8" %>
 
 <%@attribute name="id" required="true" %>
 <%@attribute name="type" required="true" %>
 <%@attribute name="autofocus" required="false" %>
 <%@attribute name="placeholder" required="false" %>
+<%@attribute name="value" required="false" %>
+<%@attribute name="label" required="false" %>
 
 <html>
+  <c:if test="${label == 'true'}">
+    <span class="text-left"><label class="dark:text-white" for="${id}"> ${placeholder} &nbsp;</label></span>
+  </c:if>
+
   <input
     class="
       focus:outline-none
@@ -24,5 +31,6 @@
     type=${type}
     placeholder=${placeholder}
     autofocus=${autofocus}
+    value=${value}
   >
 </html>

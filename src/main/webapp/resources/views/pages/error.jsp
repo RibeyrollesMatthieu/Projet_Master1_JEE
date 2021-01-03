@@ -12,14 +12,14 @@
   <jsp:include page="../../../includer.jsp"> <jsp:param name="title" value="Whoops.."/></jsp:include>
 
   <t:page>
-    <div style="
+    <body style="
       height: 100%;
       background-image: url('https://images.unsplash.com/photo-1472566316349-bce77aa2a778?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
       text-align: end;
-      margin: auto; ">
+      margin: auto;">
 
       <div style="padding: 50px 100px">
         <p class="dark:text-white" style="
@@ -32,9 +32,9 @@
           font-family: fantasy;
           color: white;"> Take a break, we'll try to fix it asap &#128521;</p>
 
-        <a href="/"> Back to home page </a>
+        <a class="text-white hover:underline" href="${pageContext.request.contextPath}/"> Back to home page </a>
       </div>
 
-    </div>
+    </body>
   </t:page>
 </html>

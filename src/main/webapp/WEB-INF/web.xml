@@ -27,6 +27,17 @@
   </servlet-mapping>
 
 
+  <servlet>
+    <servlet-name>servlets.ProfileServlet</servlet-name>
+    <servlet-class>server.servlets.ProfileServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>servlets.ProfileServlet</servlet-name>
+    <url-pattern>/profile</url-pattern>
+  </servlet-mapping>
+
+
 
   <error-page>
     <error-code>404</error-code>
