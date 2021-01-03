@@ -7,10 +7,17 @@
 <%@attribute name="placeholder" required="false" %>
 <%@attribute name="value" required="false" %>
 <%@attribute name="label" required="false" %>
+<%@attribute name="label_text" required="false" %>
 
 <html>
   <c:if test="${label == 'true'}">
-    <span class="text-left"><label class="dark:text-white" for="${id}"> ${placeholder} &nbsp;</label></span>
+    <span class="text-left"><label class="dark:text-white" for="${id}">
+      <c:choose>
+        <c:when test="${label_text != null}"> ${label_text} </c:when>
+        <c:otherwise> ${placeholder} </c:otherwise>
+      </c:choose>
+         &nbsp;
+    </label></span>
   </c:if>
 
   <input
@@ -26,11 +33,11 @@
       w-auto
       lg:w-2/5"
 
-    id=${id}
-    name=${id}
-    type=${type}
-    placeholder=${placeholder}
-    autofocus=${autofocus}
-    value=${value}
+    id="${id}"
+    name="${id}"
+    type="${type}"
+    placeholder="${placeholder}"
+    autofocus="${autofocus}"
+    value="${value}"
   >
 </html>

@@ -78,7 +78,7 @@ public class RegisterServlet extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
     final Object loggedAttribute = req.getSession().getAttribute("logged");
 
-    if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) resp.sendRedirect(req.getRequestURI().replace("register", ""));
+    if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) resp.sendRedirect(req.getContextPath());
     else req.getRequestDispatcher("resources/views/connection/register.jsp").forward(req, resp);
   }
 

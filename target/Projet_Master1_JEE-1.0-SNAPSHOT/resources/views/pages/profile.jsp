@@ -23,15 +23,25 @@
 
           <form id="register-form" class="flex-1 rounded shadow shadow-white p-5 bg-gray-200 dark:bg-gray-700 text-black"
                 action="" method="post">
-            <div class="mb-4"> <t:input id="firstname" type="text" placeholder="Firstname" autofocus='true' label="true"/> </div>
+            <div class="mb-4">
+              <t:input id="firstname" type="text" placeholder="Firstname" autofocus='true' label="true" value="${requestScope.user.getFirstname()}"/>
+            </div>
 
-            <div class="mb-4"> <t:input id="lastname" type="text" placeholder="Lastname" label="true"/> </div>
+            <div class="mb-4">
+              <t:input id="lastname" type="text" placeholder="Lastname" label="true" value="${requestScope.user.getLastname()}"/>
+            </div>
 
-            <div class="mb-4"> <t:input id="password" type="password" placeholder="Password" label="true"/> </div>
+            <div class="mb-4">
+              <t:input id="password" type="password" placeholder="New password" label="true" label_text="Password"/>
+            </div>
 
-            <div class="mb-4"> <t:input id="email" type="email" placeholder="Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" label="true"/> </div>
+            <div class="mb-4">
+              <t:input id="email" type="email" placeholder="Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" label="true" value="${requestScope.user.getEmail()}"/>
+            </div>
 
-            <div class="mb-4"> <t:input id="date" type="text" placeholder="Birthdate" label="true"/> </div>
+            <div class="mb-4">
+              <t:input id="date" type="text" placeholder="Birthdate" label="true" value="${requestScope.user.getBdate()}"/>
+            </div>
 
             <button id="register-submit-button" class="bg-yellow-600 font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed text-white" type="submit">
               Create account

@@ -53,6 +53,7 @@ public class ProfileServlet extends HttpServlet {
         req.getRequestDispatcher("resources/views/pages/profile.jsp").forward(req, resp);
       } catch (Exception e) {
         System.err.println("Unable to read user profile page.");
+        resp.sendRedirect(req.getContextPath());
       }
 
     }
