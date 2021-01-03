@@ -57,7 +57,7 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
       if (! params.get("lastname")[0].equals(user.getLastname()))
         update(connector , "users", "lastname", params.get("lastname")[0], ID);
 
-      if (! new Hashing().authenticate(params.get("password")[0], user.getPassword()))
+      if (! Hashing.check(params.get("password")[0], user.getPassword()))
         update(connector , "users", "password", params.get("password")[0], ID);
 
       if (! params.get("email")[0].equals(user.getLastname()))
@@ -65,7 +65,7 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
 
       if (! params.get("date")[0].equals(user.getLastname()))
         update(connector , "users", "birthdate", params.get("date")[0], ID);
-    } catch (SQLException sqlException) {
+    } catch (Exception sqlException) {
       sqlException.printStackTrace();
     }
   }

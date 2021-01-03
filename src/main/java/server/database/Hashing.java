@@ -1,121 +1,49 @@
 package server.database;
 
+import org.apache.commons.codec.binary.Base64;
+
+import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public final class Hashing {
+  // The higher the number of iterations the more
+  // expensive computing the hash is for us and
+  // also for an attacker.
+  private static final int iterations = 20*1000;
+  private static final int saltLen = 32;
+  private static final int desiredKeyLen = 256;
 
-  /**
-   * Each token produced by this class uses this identifier as a prefix.
-   */
-  public static final String ID = "$42$";
+  /** Computes a salted PBKDF2 hash of given plaintext password
+   suitable for storing in a database.
+   Empty passwords are not supported. */
+  public static String getSaltedHash(String password) throws Exception {
+    byte[] salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(saltLen);
+    // store the salt with the password
+    return Base64.encodeBase64String(salt) + "$" + hash(password, salt);
+  }
 
-  /**
-   * The minimum recommended cost, used by default
-   */
-  public static final int DEFAULT_COST = 16;
-
-  private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
-
-  private static final int SIZE = 128;
-
-  private static final Pattern layout = Pattern.compile("\\$31\\$(\\d\\d?)\\$(.{43})");
-
-  private final SecureRandom random;
-
-  private final int cost;
-
-  public Hashing()
-    {
-    this(DEFAULT_COST);
+  /** Checks whether given plaintext password corresponds
+   to a stored salted hash of the password. */
+  public static boolean check(String password, String stored) throws Exception{
+    String[] saltAndHash = stored.split("\\$");
+    if (saltAndHash.length != 2) {
+      throw new IllegalStateException(
+        "The stored password must have the form 'salt$hash'");
     }
+    String hashOfInput = hash(password, Base64.decodeBase64(saltAndHash[0]));
+    return hashOfInput.equals(saltAndHash[1]);
+  }
 
-  /**
-   * Create a password manager with a specified cost
-   *
-   * @param cost the exponential computational cost of hashing a password, 0 to 30
-   */
-  public Hashing(int cost)
-    {
-    iterations(cost); /* Validate cost */
-    this.cost = cost;
-    this.random = new SecureRandom();
-    }
-
-  private static int iterations(int cost)
-    {
-    if ((cost < 0) || (cost > 30))
-    throw new IllegalArgumentException("cost: " + cost);
-    return 1 << cost;
-    }
-
-  /**
-   * Hash a password for storage.
-   *
-   * @return a secure authentication token to be stored for later authentication
-   */
-  public String hash(char[] password)
-    {
-      byte[] salt = new byte[SIZE / 8];
-      random.nextBytes(salt);
-      byte[] dk = pbkdf2(password, salt, 1 << cost);
-      byte[] hash = new byte[salt.length + dk.length];
-      System.arraycopy(salt, 0, hash, 0, salt.length);
-      System.arraycopy(dk, 0, hash, salt.length, dk.length);
-      Base64.Encoder enc = Base64.getUrlEncoder().withoutPadding();
-      return ID + cost + '$' + enc.encodeToString(hash);
-    }
-
-  /**
-   * Authenticate with a password and a stored password token.
-   *
-   * @return true if the password and token match
-   */
-  public boolean authenticate(char[] password, String token)
-    {
-    Matcher m = layout.matcher(token);
-    if (!m.matches())
-    throw new IllegalArgumentException("Invalid token format");
-    int iterations = iterations(Integer.parseInt(m.group(1)));
-    byte[] hash = Base64.getUrlDecoder().decode(m.group(2));
-    byte[] salt = Arrays.copyOfRange(hash, 0, SIZE / 8);
-    byte[] check = pbkdf2(password, salt, iterations);
-    int zero = 0;
-    for (int idx = 0; idx < check.length; ++idx)
-    zero |= hash[salt.length + idx] ^ check[idx];
-    return zero == 0;
-    }
-
-  private static byte[] pbkdf2(char[] password, byte[] salt, int iterations)
-    {
-    KeySpec spec = new PBEKeySpec(password, salt, iterations, SIZE);
-    try {
-    SecretKeyFactory f = SecretKeyFactory.getInstance(ALGORITHM);
-    return f.generateSecret(spec).getEncoded();
-    }
-    catch (NoSuchAlgorithmException ex) {
-    throw new IllegalStateException("Missing algorithm: " + ALGORITHM, ex);
-    }
-    catch (InvalidKeySpecException ex) {
-    throw new IllegalStateException("Invalid SecretKeyFactory", ex);
-    }
-    }
-
-  public String hash(String password)
-    {
-    return hash(password.toCharArray());
-    }
-
-  public boolean authenticate(String password, String token)
-    {
-    return authenticate(password.toCharArray(), token);
+  // using PBKDF2 from Sun, an alternative is https://github.com/wg/scrypt
+  // cf. http://www.unlimitednovelty.com/2012/03/dont-use-bcrypt.html
+  private static String hash(String password, byte[] salt) throws Exception {
+    if (password == null || password.length() == 0)
+      throw new IllegalArgumentException("Empty passwords are not supported.");
+    SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+    SecretKey key = f.generateSecret(new PBEKeySpec(
+      password.toCharArray(), salt, iterations, desiredKeyLen));
+    return Base64.encodeBase64String(key.getEncoded());
   }
 }

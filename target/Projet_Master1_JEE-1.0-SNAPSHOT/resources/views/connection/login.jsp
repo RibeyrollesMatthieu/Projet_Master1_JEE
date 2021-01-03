@@ -22,7 +22,7 @@
       <form id="register-form" class="flex-1 rounded shadow shadow-white p-5 bg-gray-200 dark:bg-gray-700 text-black"
             action="" method="post">
 
-        <div class="mb-4"> <t:input id="email" type="email" placeholder="Email address" /> </div>
+        <div class="mb-4"> <t:input id="email" type="email" placeholder="Email address" autofocus="true" /> </div>
         <div class="mb-4"> <t:input id="password" type="password" placeholder="Password" /> </div>
 
         <div class="mb-4">

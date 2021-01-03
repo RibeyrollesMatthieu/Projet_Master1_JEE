@@ -26,16 +26,14 @@ public class RegisterServlet extends HttpServlet implements FormsMethods {
   // setters
   // private
 
-  private int createAccount(String email, String firstname, String lastname, String password, String bdate) throws SQLException {
+  private int createAccount(String email, String firstname, String lastname, String password, String bdate) throws Exception {
     SQLConnector connector = new SQLConnector();
     connector.connect("projet_master1_jee", "root", "");
-
-    Hashing hashing = new Hashing();
 
     connector.doRequest(
       String.format("INSERT INTO users(%s, %s, %s, %s, %s) VALUES('%s','%s','%s','%s','%s');",
         "email", "firstname", "lastname", "password", "birthdate",
-        email, firstname, lastname, hashing.hash(password), bdate), true);
+        email, firstname, lastname, Hashing.getSaltedHash(password), bdate), true);
 
     System.out.print("Successfully created new user\n");
 
@@ -99,6 +97,8 @@ public class RegisterServlet extends HttpServlet implements FormsMethods {
       } catch (SQLException sqlException) {
         System.err.println("Unable to create account");
         resp.sendRedirect(req.getRequestURI());
+      } catch (Exception e) {
+        e.printStackTrace();
       }
     } else {
       req.getRequestDispatcher("resources/views/connection/register.jsp").forward(req, resp);
