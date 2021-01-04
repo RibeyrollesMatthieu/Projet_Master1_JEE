@@ -45,12 +45,16 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
       table, field, value, id), true);
   }
 
-  private void updateProfile(HttpServletRequest req, Map<String, String[]> params) {
+  private void updateProfile(HttpServletRequest req, Map<String, String[]> params) throws SQLException {
     final int ID = (int) req.getSession().getAttribute("id");
     final UserBean user = (UserBean) req.getSession().getAttribute("user");
 
     SQLConnector connector = new SQLConnector();
     connector.connect("projet_master1_jee", "root", "");
+
+    for (String param : params.keySet()) {
+      if (isFieldTooLargeForDataBase(param, params.get(param)[0])) throw new SQLException("Input too large.");
+    }
 
     try {
       if (! params.get("firstname")[0].equals(user.getFirstname())){
