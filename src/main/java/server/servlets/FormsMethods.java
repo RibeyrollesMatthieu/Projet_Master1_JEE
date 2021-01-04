@@ -4,10 +4,7 @@ import server.database.SQLConnector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
 
@@ -26,10 +23,6 @@ public interface FormsMethods {
         return false;
       }
 
-      if (req.getParameter(param).length() > new SQLConnector().getAllowedSizeForColumnField(param)) {
-        System.err.printf("Param %s exceed the allowed size%n", param);
-        return false;
-      }
     }
 
     if (req.getParameterMap().containsKey("confirm-password")) {

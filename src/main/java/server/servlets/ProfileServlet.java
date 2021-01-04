@@ -52,11 +52,6 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
     SQLConnector connector = new SQLConnector();
     connector.connect("projet_master1_jee", "root", "");
 
-    for (String param : params.keySet()) {
-      if (params.get(param)[0].length() > connector.getAllowedSizeForColumnField(param))
-        throw new SQLException("Input too large.");
-    }
-
     try {
       if (! params.get("firstname")[0].equals(user.getFirstname())){
         user.setFirstname(params.get("firstname")[0]);
@@ -80,7 +75,7 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
 
       if (! params.get("date")[0].equals(user.getBdate().toString())){
         String pattern = "yyyy-MM-dd";
-        user.setBdate(new Date(new SimpleDateFormat(pattern).format(params.get("date")[0]))); //FIXME deprecated, use Calendar instead
+        user.setBdate(new SimpleDateFormat(pattern).parse(params.get("date")[0])); //FIXME get only year month and day
         update(connector , "users", "birthdate", params.get("date")[0], ID);
       }
     } catch (Exception sqlException) {

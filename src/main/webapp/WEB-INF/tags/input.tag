@@ -10,6 +10,8 @@
 <%@attribute name="label" required="false" %>
 <%@attribute name="label_text" required="false" %>
 
+
+<%--TODO: remove all the length verifications methods--%>
 <html>
   <c:if test="${label == 'true'}">
     <span class="text-left"><label class="dark:text-white" for="${id}">
