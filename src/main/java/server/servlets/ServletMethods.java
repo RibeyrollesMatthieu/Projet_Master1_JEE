@@ -21,7 +21,9 @@ public interface ServletMethods {
       userBean.setFirstname(rs.getString("firstname"));
       userBean.setLastname(rs.getString("lastname"));
       userBean.setBdate(rs.getDate("birthdate"));
-      userBean.setPassword(rs.getString("password"));
+      userBean.setCovided(rs.getBoolean("covided"));
+      if (Integer.parseInt(req.getSession().getAttribute("id").toString()) == rs.getInt("id"))
+        userBean.setPassword(rs.getString("password"));
 
       req.getSession().setAttribute("user", userBean);
     } catch (Exception e) {

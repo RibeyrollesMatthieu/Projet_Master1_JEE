@@ -39,8 +39,9 @@ public class SQLConnector extends DbConnector {
     //FIXME does it check on purpose the fact that after 48, there's no more 47 (CRESC IDS)
     try {
       ResultSet set = SQLConnector.getInstance().doRequest(String.format(
-        "SELECT * FROM friendship " +
-        "WHERE _from = %d;", id), false);
+        "SELECT _to FROM friendship " +
+        "WHERE _from = %d " +
+        "AND status = 'F';", id), false);
 
       return set;
     } catch (SQLException sqlException) {

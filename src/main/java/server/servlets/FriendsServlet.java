@@ -2,6 +2,7 @@ package server.servlets;
 
 import server.database.DbConnector;
 import server.database.SQLConnector;
+import server.database.UserBean;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,10 +38,21 @@ public class FriendsServlet extends HttpServlet {
       ResultSet set = SQLConnector.getInstance().getFriendsOf(Integer.parseInt(req.getSession().getAttribute("id").toString()));
 
       try {
+        UserBean user = (UserBean) req.getSession().getAttribute("user");
+
         while(set.next()) {
-          for (int i = 1; i <= set.getMetaData().getColumnCount(); i++) {
-            System.out.println(set.getString(i));
-          }
+          UserBean friend = new UserBean();
+          for (int i = 1; i <=set.getMetaData().getColumnCount(); i++) System.out.println(set.getObject(i));
+          ResultSet friendSet = SQLConnector.getInstance().getUser(set.getInt(1));
+          friendSet.next();
+
+          friend.setFirstname(friendSet.getString("firstname"));
+          friend.setLastname(friendSet.getString("lastname"));
+          friend.setEmail(friendSet.getString("email"));
+          friend.setBdate(friendSet.getDate("birthdate"));
+          friend.setCovided(friendSet.getBoolean("covided"));
+
+          user.addFriend(friend);
         }
       } catch (SQLException sqlException) {
         sqlException.printStackTrace();

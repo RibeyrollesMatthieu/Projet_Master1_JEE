@@ -2,6 +2,7 @@ package server.database;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 /**
  * @author Ribeyrolles Matthieu
@@ -10,8 +11,10 @@ import java.util.Date;
 public class UserBean {
   private String firstname, lastname, email, password;
   private Date bdate;
-  private ArrayList<Integer> friendsIds;
-  private ArrayList<Integer> pendingIds;
+  private boolean isCovided;
+  private HashSet<UserBean> friends;
+  private HashSet<Integer> friendsIds;
+  private HashSet<Integer> pendingIds;
 
   /*------------------------------------------------------------------
                               Methods
@@ -39,42 +42,35 @@ public class UserBean {
     return bdate;
   }
 
-  public ArrayList<Integer> getFriendsIds() { return friendsIds; }
+  public boolean isCovided() { return isCovided; }
 
-  public ArrayList<Integer> getPendingIds() { return pendingIds; }
+  public HashSet<Integer> getFriendsIds() { return friendsIds; }
+  public HashSet<UserBean> getFriends() { return friends; }
+  public HashSet<Integer> getPendingIds() { return pendingIds; }
 
-  // setters
-
+  // settersHashSet
 
   public void setBdate(Date bdate) {
     this.bdate = bdate;
   }
-
   public void setFirstname(String firstname) {
     this.firstname = firstname;
   }
-
   public void setLastname(String lastname) {
     this.lastname = lastname;
   }
-
   public void setEmail(String email) {
     this.email = email;
   }
-
   public void setPassword(String password) {
     this.password = password;
   }
-
-  public void setFriendsIds(ArrayList<Integer> friendsIds) { this.friendsIds = friendsIds; }
-
-  public void setPendingIds(ArrayList<Integer> pendingIds) { this.pendingIds = pendingIds; }
-
   public void addFriendId(int i) {
     this.friendsIds.add(i);
   }
-
+  public void setCovided(boolean covided) { isCovided = covided; }
   public void addPendingId(int i) { this.pendingIds.add(i); }
+  public void addFriend(UserBean userBean) { this.friends.add(userBean); }
 
   // private
   // public
@@ -96,7 +92,8 @@ public class UserBean {
    ------------------------------------------------------------------*/
 
   public UserBean() {
-    this.friendsIds = new ArrayList<>();
-    this.pendingIds = new ArrayList<>();
+    this.friendsIds = new HashSet<>();
+    this.pendingIds = new HashSet<>();
+    this.friends = new HashSet<>();
   }
 }
