@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.Stack;
 
@@ -51,20 +53,31 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
     connector.connect("projet_master1_jee", "root", "");
 
     try {
-      if (! params.get("firstname")[0].equals(user.getFirstname()))
+      if (! params.get("firstname")[0].equals(user.getFirstname())){
+        user.setFirstname(params.get("firstname")[0]);
         update(connector , "users", "firstname", params.get("firstname")[0], ID);
+      }
 
-      if (! params.get("lastname")[0].equals(user.getLastname()))
+      if (! params.get("lastname")[0].equals(user.getLastname())){
+        user.setLastname(params.get("lastname")[0]);
         update(connector , "users", "lastname", params.get("lastname")[0], ID);
+      }
 
-      if (! Hashing.check(params.get("password")[0], user.getPassword()))
-        update(connector , "users", "password", params.get("password")[0], ID);
+      if (! Hashing.check(params.get("password")[0], user.getPassword())){
+        user.setPassword(Hashing.getSaltedHash(params.get("password")[0]));
+        update(connector , "users", "password", Hashing.getSaltedHash(params.get("password")[0]), ID);
+      }
 
-      if (! params.get("email")[0].equals(user.getLastname()))
+      if (! params.get("email")[0].equals(user.getEmail())){
+        user.setEmail(params.get("email")[0]);
         update(connector , "users", "email", params.get("email")[0], ID);
+      }
 
-      if (! params.get("date")[0].equals(user.getLastname()))
+      if (! params.get("date")[0].equals(user.getBdate().toString())){
+        String pattern = "yyyy-MM-dd";
+        user.setBdate(new Date(new SimpleDateFormat(pattern).format(params.get("date")[0]))); //FIXME deprecated, use Calendar instead
         update(connector , "users", "birthdate", params.get("date")[0], ID);
+      }
     } catch (Exception sqlException) {
       sqlException.printStackTrace();
     }

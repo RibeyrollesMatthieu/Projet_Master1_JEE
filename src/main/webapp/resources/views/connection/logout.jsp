@@ -35,7 +35,7 @@
     </div>
 
     <script>
-      setTimeout(() => window.location.href = "register", 1500);
+      setTimeout(() => window.location.href = "login", 1000);
     </script>
   </t:page>
 </html>
