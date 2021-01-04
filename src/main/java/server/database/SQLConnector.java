@@ -10,6 +10,8 @@ public class SQLConnector extends DbConnector {
   private final String RESET = "\033[0m";
   private final String BLUE_COLOR = "\033[0;34m";
 
+  private volatile static SQLConnector instance;
+
   /*------------------------------------------------------------------
                               Methods
    ------------------------------------------------------------------*/
@@ -34,6 +36,24 @@ public class SQLConnector extends DbConnector {
       "SELECT column_name FROM information_schema.columns " +
       "WHERE table_schema=DATABASE() " +
       "ORDER BY table_name, ordinal_position;", false);
+  }
+
+  @Override
+  public ResultSet getFriendsOf(int id) {
+    this.connect("projet_master1_jee", "root", "");
+
+    //FIXME does it check on purpose the fact that after 48, there's no more 47 (CRESC IDS)
+    try {
+      ResultSet set = this.doRequest(String.format(
+        "SELECT * FROM friendship " +
+        "WHERE _from = %d;", id), false);
+
+      return set;
+    } catch (SQLException sqlException) {
+      sqlException.printStackTrace();
+    }
+
+    return null;
   }
 
   @Override
@@ -116,9 +136,21 @@ public class SQLConnector extends DbConnector {
     this.setDriverName("com.mysql.cj.jdbc.Driver");
   }
 
+  public static SQLConnector getInstance() {
+    if (instance == null) {
+      synchronized (SQLConnector.class) {
+        if (instance == null) {
+          instance = new SQLConnector();
+        }
+      }
+    }
+
+    return instance;
+  }
+
    /*------------------------------------------------------------------
                             Constructors
    ------------------------------------------------------------------*/
 
-  public SQLConnector() { }
+  private SQLConnector() { }
 }

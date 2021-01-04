@@ -41,6 +41,7 @@ public abstract class DbConnector {
     return null;
   }
 
+  public abstract ResultSet getFriendsOf(int id);
   public abstract ResultSet getAllColumns() throws SQLException;
   public abstract int getAllowedSizeForColumnField(String column);
   public abstract Connection connect(String database, String user, String password);

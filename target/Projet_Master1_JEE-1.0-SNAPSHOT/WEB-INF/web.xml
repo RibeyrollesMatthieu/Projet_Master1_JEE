@@ -60,6 +60,29 @@
   </servlet-mapping>
 
 
+  <servlet>
+    <servlet-name>servlets.FriendsServlet</servlet-name>
+    <servlet-class>server.servlets.FriendsServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>servlets.FriendsServlet</servlet-name>
+    <url-pattern>/friends</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>servlets.RelationServlet</servlet-name>
+    <servlet-class>server.servlets.RelationServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>servlets.RelationServlet</servlet-name>
+    <url-pattern>/relation-update</url-pattern>
+  </servlet-mapping>
+
+
+
   <error-page>
     <error-code>404</error-code>
     <location>/resources/views/pages/error.jsp</location>

@@ -12,11 +12,10 @@ import java.sql.ResultSet;
  */
 public interface ServletMethods {
   default void createUserBean(HttpServletRequest req) {
-    SQLConnector connector = new SQLConnector();
-    connector.connect("projet_master1_jee", "root", "");
+    SQLConnector.getInstance().connect("projet_master1_jee", "root", "");
 
     try {
-      final ResultSet rs = connector.getUser((Integer) req.getSession().getAttribute("id"));
+      final ResultSet rs = SQLConnector.getInstance().getUser((Integer) req.getSession().getAttribute("id"));
       UserBean userBean = new UserBean();
 
       rs.next();

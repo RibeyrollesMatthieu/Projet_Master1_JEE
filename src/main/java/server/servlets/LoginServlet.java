@@ -27,10 +27,9 @@ public class LoginServlet extends HttpServlet implements FormsMethods, ServletMe
   private ResultSet connect(HttpServletRequest req, String email) throws SQLException {
     assert email != null: "Email cannot be null";
 
-    SQLConnector connector = new SQLConnector();
-    connector.connect("projet_master1_jee", "root", "");
+    SQLConnector.getInstance().connect("projet_master1_jee", "root", "");
 
-    ResultSet set = connector.doRequest(String.format("SELECT password, id FROM users WHERE email='%s'", email), false);
+    ResultSet set = SQLConnector.getInstance().doRequest(String.format("SELECT password, id FROM users WHERE email='%s'", email), false);
 
     System.out.print("found user in database\n");
 
@@ -49,15 +48,14 @@ public class LoginServlet extends HttpServlet implements FormsMethods, ServletMe
       HashMap<String, Integer> columnsLength = new HashMap<>();
 
       try {
-        SQLConnector connector = new SQLConnector();
-        connector.connect("projet_master1_jee", "root", "");
+        SQLConnector.getInstance().connect("projet_master1_jee", "root", "");
 
-        ResultSet set = connector.getAllColumns();
+        ResultSet set = SQLConnector.getInstance().getAllColumns();
 
 
         while(set.next()) {
           for (int i = 1; i <= set.getMetaData().getColumnCount(); i++) {
-            columnsLength.put(set.getString(i), connector.getAllowedSizeForColumnField(set.getString(i)));
+            columnsLength.put(set.getString(i), SQLConnector.getInstance().getAllowedSizeForColumnField(set.getString(i)));
           }
         }
 

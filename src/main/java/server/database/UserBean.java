@@ -1,5 +1,6 @@
 package server.database;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -9,6 +10,9 @@ import java.util.Date;
 public class UserBean {
   private String firstname, lastname, email, password;
   private Date bdate;
+  private ArrayList<Integer> friendsIds;
+  private ArrayList<Integer> pendingIds;
+
   /*------------------------------------------------------------------
                               Methods
    ------------------------------------------------------------------*/
@@ -35,6 +39,9 @@ public class UserBean {
     return bdate;
   }
 
+  public ArrayList<Integer> getFriendsIds() { return friendsIds; }
+
+  public ArrayList<Integer> getPendingIds() { return pendingIds; }
 
   // setters
 
@@ -59,6 +66,16 @@ public class UserBean {
     this.password = password;
   }
 
+  public void setFriendsIds(ArrayList<Integer> friendsIds) { this.friendsIds = friendsIds; }
+
+  public void setPendingIds(ArrayList<Integer> pendingIds) { this.pendingIds = pendingIds; }
+
+  public void addFriendId(int i) {
+    this.friendsIds.add(i);
+  }
+
+  public void addPendingId(int i) { this.pendingIds.add(i); }
+
   // private
   // public
 
@@ -79,5 +96,7 @@ public class UserBean {
    ------------------------------------------------------------------*/
 
   public UserBean() {
+    this.friendsIds = new ArrayList<>();
+    this.pendingIds = new ArrayList<>();
   }
 }

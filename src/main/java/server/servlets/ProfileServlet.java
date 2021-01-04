@@ -39,8 +39,8 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
     else resp.sendRedirect(req.getContextPath());
   }
 
-  private void update(DbConnector connector, String table, String field, String value, int id) throws SQLException {
-    connector.doRequest(String.format(
+  private void update(String table, String field, String value, int id) throws SQLException {
+    SQLConnector.getInstance().doRequest(String.format(
       "UPDATE %s SET %s='%s' WHERE id=%s;",
       table, field, value, id), true);
   }
@@ -49,34 +49,33 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
     final int ID = (int) req.getSession().getAttribute("id");
     final UserBean user = (UserBean) req.getSession().getAttribute("user");
 
-    SQLConnector connector = new SQLConnector();
-    connector.connect("projet_master1_jee", "root", "");
+    SQLConnector.getInstance().connect("projet_master1_jee", "root", "");
 
     try {
       if (! params.get("firstname")[0].equals(user.getFirstname())){
         user.setFirstname(params.get("firstname")[0]);
-        update(connector , "users", "firstname", params.get("firstname")[0], ID);
+        update("users", "firstname", params.get("firstname")[0], ID);
       }
 
       if (! params.get("lastname")[0].equals(user.getLastname())){
         user.setLastname(params.get("lastname")[0]);
-        update(connector , "users", "lastname", params.get("lastname")[0], ID);
+        update("users", "lastname", params.get("lastname")[0], ID);
       }
 
       if (! Hashing.check(params.get("password")[0], user.getPassword())){
         user.setPassword(Hashing.getSaltedHash(params.get("password")[0]));
-        update(connector , "users", "password", Hashing.getSaltedHash(params.get("password")[0]), ID);
+        update("users", "password", Hashing.getSaltedHash(params.get("password")[0]), ID);
       }
 
       if (! params.get("email")[0].equals(user.getEmail())){
         user.setEmail(params.get("email")[0]);
-        update(connector , "users", "email", params.get("email")[0], ID);
+        update("users", "email", params.get("email")[0], ID);
       }
 
       if (! params.get("date")[0].equals(user.getBdate().toString())){
         String pattern = "yyyy-MM-dd";
         user.setBdate(new SimpleDateFormat(pattern).parse(params.get("date")[0])); //FIXME get only year month and day
-        update(connector , "users", "birthdate", params.get("date")[0], ID);
+        update("users", "birthdate", params.get("date")[0], ID);
       }
     } catch (Exception sqlException) {
       sqlException.printStackTrace();
