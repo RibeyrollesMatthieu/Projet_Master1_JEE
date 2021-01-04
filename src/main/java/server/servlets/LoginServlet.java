@@ -2,7 +2,6 @@ package server.servlets;
 
 import server.database.Hashing;
 import server.database.SQLConnector;
-import server.database.UserBean;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * @author Ribeyrolles Matthieu
@@ -45,12 +45,34 @@ public class LoginServlet extends HttpServlet implements FormsMethods, ServletMe
     final Object loggedAttribute = req.getSession().getAttribute("logged");
 
     if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) resp.sendRedirect(req.getContextPath());
-    else req.getRequestDispatcher("resources/views/connection/login.jsp").forward(req, resp);
+    else {
+      HashMap<String, Integer> columnsLength = new HashMap<>();
+
+      try {
+        SQLConnector connector = new SQLConnector();
+        connector.connect("projet_master1_jee", "root", "");
+
+        ResultSet set = connector.getAllColumns();
+
+
+        while(set.next()) {
+          for (int i = 1; i <= set.getMetaData().getColumnCount(); i++) {
+            columnsLength.put(set.getString(i), connector.getAllowedSizeForColumnField(set.getString(i)));
+          }
+        }
+
+        req.getSession().setAttribute("columnsLength", columnsLength);
+      } catch (SQLException sqlException) {
+        sqlException.printStackTrace();
+      }
+
+      req.getRequestDispatcher("resources/views/connection/login.jsp").forward(req, resp);
+    }
   }
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    if (this.isFormCorrectlyWritten(req, resp)) {
+    if (this.isFormCorrectlyWritten(req)) {
       try {
         ResultSet set = this.connect(req, req.getParameter("email"));
 

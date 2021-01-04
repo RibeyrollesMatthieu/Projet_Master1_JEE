@@ -53,7 +53,8 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
     connector.connect("projet_master1_jee", "root", "");
 
     for (String param : params.keySet()) {
-      if (isFieldTooLargeForDataBase(param, params.get(param)[0])) throw new SQLException("Input too large.");
+      if (params.get(param)[0].length() > connector.getAllowedSizeForColumnField(param))
+        throw new SQLException("Input too large.");
     }
 
     try {
@@ -89,7 +90,7 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    if (this.isFormCorrectlyWritten(req, resp)) {
+    if (this.isFormCorrectlyWritten(req)) {
       try {
         this.updateProfile(req, req.getParameterMap());
         resp.sendRedirect(req.getRequestURI());

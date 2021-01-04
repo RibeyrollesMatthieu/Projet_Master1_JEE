@@ -58,7 +58,7 @@ public class RegisterServlet extends HttpServlet implements FormsMethods, Servle
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    if (this.isFormCorrectlyWritten(req, resp)) {
+    if (this.isFormCorrectlyWritten(req)) {
       try {
         int id = createAccount(
           req.getParameter("email"),

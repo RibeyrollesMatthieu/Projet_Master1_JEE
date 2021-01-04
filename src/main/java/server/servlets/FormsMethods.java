@@ -17,31 +17,7 @@ import java.util.regex.Pattern;
  */
 public interface FormsMethods {
 
-  default boolean isFieldTooLargeForDataBase(String field, String value) {
-    SQLConnector connector = new SQLConnector();
-    connector.connect("projet_master1_jee", "root", "");
-
-    try {
-      ResultSet set = connector.doRequest(String.format(
-        "SELECT COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH " +
-        "FROM information_schema.columns " +
-        "WHERE table_schema=DATABASE() AND " +
-        "table_name='users' AND " +
-        "COLUMN_NAME='%s';"
-        , field), false);
-      set.next();
-      final int maxValue = set.getInt(2);
-
-      if (value.length() > maxValue) return false;
-
-    } catch (SQLException sqlException) {
-      sqlException.printStackTrace();
-    }
-
-    return true;
-  }
-
-  default boolean isFormCorrectlyWritten(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  default boolean isFormCorrectlyWritten(HttpServletRequest req) throws ServletException, IOException {
     Enumeration<String> params = req.getParameterNames();
     while (params.hasMoreElements()) {
       String param = params.nextElement();
@@ -50,7 +26,7 @@ public interface FormsMethods {
         return false;
       }
 
-      if (! isFieldTooLargeForDataBase(param, req.getParameter(param))) {
+      if (req.getParameter(param).length() > new SQLConnector().getAllowedSizeForColumnField(param)) {
         System.err.printf("Param %s exceed the allowed size%n", param);
         return false;
       }

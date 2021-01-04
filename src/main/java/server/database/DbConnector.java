@@ -40,6 +40,9 @@ public abstract class DbConnector {
 
     return null;
   }
+
+  public abstract ResultSet getAllColumns() throws SQLException;
+  public abstract int getAllowedSizeForColumnField(String column);
   public abstract Connection connect(String database, String user, String password);
   public abstract ResultSet doRequest(String query, boolean changingValues) throws SQLException;
    /*------------------------------------------------------------------

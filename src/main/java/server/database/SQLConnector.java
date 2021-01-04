@@ -21,14 +21,42 @@ public class SQLConnector extends DbConnector {
 
   //TODO set in his parent too
   public ResultSet getUser(int id) throws SQLException {
-    SQLConnector connector = new SQLConnector();
-    connector.connect("projet_master1_jee", "root", "");
+    this.connect("projet_master1_jee", "root", "");
 
-    ResultSet set = connector.doRequest(
+    return this.doRequest(
       String.format("SELECT * FROM users WHERE id=%d;", id), false
     );
+  }
 
-    return set;
+  @Override
+  public ResultSet getAllColumns() throws SQLException {
+    return this.doRequest(
+      "SELECT column_name FROM information_schema.columns " +
+      "WHERE table_schema=DATABASE() " +
+      "ORDER BY table_name, ordinal_position;", false);
+  }
+
+  @Override
+  public int getAllowedSizeForColumnField(String column) {
+    this.connect("projet_master1_jee", "root", "");
+
+    try {
+      ResultSet set = this.doRequest(String.format(
+        "SELECT COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH " +
+          "FROM information_schema.columns " +
+          "WHERE table_schema=DATABASE() AND " +
+          "table_name='users' AND " +
+          "COLUMN_NAME='%s';"
+        , column), false);
+      set.next();
+
+      return set.getInt(2);
+
+    } catch (SQLException sqlException) {
+      sqlException.printStackTrace();
+    }
+
+    return -1;
   }
 
   @Override
