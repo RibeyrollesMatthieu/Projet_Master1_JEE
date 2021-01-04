@@ -27,14 +27,12 @@ public class RegisterServlet extends HttpServlet implements FormsMethods, Servle
   // private
 
   private int createAccount(String email, String firstname, String lastname, String password, String bdate) throws Exception {
-    SQLConnector.getInstance().connect("projet_master1_jee", "root", "");
-
     SQLConnector.getInstance().doRequest(
       String.format("INSERT INTO users(%s, %s, %s, %s, %s) VALUES('%s','%s','%s','%s','%s');",
         "email", "firstname", "lastname", "password", "birthdate",
         email, firstname, lastname, Hashing.getSaltedHash(password), bdate), true);
 
-    System.out.print("Successfully created new user\n");
+    System.out.printf("%sSuccessfully created new user%s\n", "\u001B[32m", "\u001B[0m");
 
     ResultSet set = SQLConnector.getInstance().doRequest(
       String.format("SELECT id FROM users WHERE email='%s';", email), false

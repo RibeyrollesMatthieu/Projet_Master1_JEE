@@ -7,9 +7,6 @@ import java.sql.*;
  * 29/12/2020, 22:37
  */
 public class SQLConnector extends DbConnector {
-  private final String RESET = "\033[0m";
-  private final String BLUE_COLOR = "\033[0;34m";
-
   private volatile static SQLConnector instance;
 
   /*------------------------------------------------------------------
@@ -23,28 +20,25 @@ public class SQLConnector extends DbConnector {
 
   //TODO set in his parent too
   public ResultSet getUser(int id) throws SQLException {
-    this.connect("projet_master1_jee", "root", "");
-
-    return this.doRequest(
+    return SQLConnector.getInstance().doRequest(
       String.format("SELECT * FROM users WHERE id=%d;", id), false
     );
   }
 
   @Override
-  public ResultSet getAllColumns() throws SQLException {
-    return this.doRequest(
+  public ResultSet getAllColumnsFor(String table) throws SQLException {
+    //FIXME returns nothin. Works using (datatbase()) but returns all the tables columns
+    return SQLConnector.getInstance().doRequest(String.format(
       "SELECT column_name FROM information_schema.columns " +
-      "WHERE table_schema=DATABASE() " +
-      "ORDER BY table_name, ordinal_position;", false);
+        "WHERE table_schema = database() AND table_name = '%s'", table)
+      , false);
   }
 
   @Override
   public ResultSet getFriendsOf(int id) {
-    this.connect("projet_master1_jee", "root", "");
-
     //FIXME does it check on purpose the fact that after 48, there's no more 47 (CRESC IDS)
     try {
-      ResultSet set = this.doRequest(String.format(
+      ResultSet set = SQLConnector.getInstance().doRequest(String.format(
         "SELECT * FROM friendship " +
         "WHERE _from = %d;", id), false);
 
@@ -57,19 +51,18 @@ public class SQLConnector extends DbConnector {
   }
 
   @Override
-  public int getAllowedSizeForColumnField(String column) {
-    this.connect("projet_master1_jee", "root", "");
-
+  public int getAllowedSizeForColumnField(String table, String column) {
     try {
-      ResultSet set = this.doRequest(String.format(
+      ResultSet set = SQLConnector.getInstance().doRequest(String.format(
         "SELECT COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH " +
           "FROM information_schema.columns " +
-          "WHERE table_schema=DATABASE() AND " +
-          "table_name='users' AND " +
-          "COLUMN_NAME='%s';"
-        , column), false);
+          "WHERE table_schema=database() AND " +
+          "table_name='%s' AND " +
+          "column_name='%s';"
+        , table, column), false);
       set.next();
 
+      //FIXME bigInt in table, not int
       return set.getInt(2);
 
     } catch (SQLException sqlException) {
@@ -82,16 +75,15 @@ public class SQLConnector extends DbConnector {
   @Override
   public ResultSet doRequest(String query, boolean changingValues) throws SQLException {
     ResultSet resultSet = null;
-    Connection connection = null;
 
-    try {
-      connection = this.connect(this.getDatabaseName(), this.getDatabaseUserName(), this.getDatabaseUserPassword());
-    } catch (NullPointerException nullPointerException) {
-      System.err.println("Cannot do the request cause a connection has not been set yet");
-    }
+//    try {
+//      SQLConnector.getInstance().connect();
+//    } catch (NullPointerException nullPointerException) {
+//      System.err.println("Cannot do the request cause a connection has not been set yet");
+//    }
 
-    assert connection != null : "Cannot execute he query cause connection is null.";
-    Statement statement = connection.createStatement();
+    assert SQLConnector.getInstance().getConnection() != null : "Cannot execute he query cause connection is null.";
+    Statement statement = SQLConnector.getInstance().getConnection().createStatement();
 
     if (changingValues) statement.executeUpdate(query);
     else resultSet = statement.executeQuery(query);
@@ -100,17 +92,15 @@ public class SQLConnector extends DbConnector {
   }
 
   @Override
-  public Connection connect(String databaseName, String databaseUserName, String databaseUserPassword) {
-    this.setDatabaseName(databaseName);
-    this.setDatabaseUserName(databaseUserName);
-    this.setDatabaseUserPassword(databaseUserPassword);
+  public void connect(String databaseName, String databaseUserName, String databaseUserPassword) {
+    SQLConnector.getInstance().setDatabaseName(databaseName);
+    SQLConnector.getInstance().setDatabaseUserName(databaseUserName);
+    SQLConnector.getInstance().setDatabaseUserPassword(databaseUserPassword);
 
-    Connection connection = null;
-
-    System.out.printf("%sConnecting to database..%s\n", this.BLUE_COLOR, this.RESET);
+    System.out.printf("%sConnecting to database..%s\n", "\033[0;34m", "\033[0m");
 
     try {
-      Class.forName(this.getDriverName());
+      Class.forName(SQLConnector.getInstance().getDriverName());
     } catch (ClassNotFoundException classNotFoundException) {
       System.err.println(classNotFoundException.getMessage());
     }
@@ -121,19 +111,17 @@ public class SQLConnector extends DbConnector {
         "&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&" +
         "serverTimezone=UTC", databaseName);
 
-      connection = DriverManager.getConnection(dbUrl, this.getDatabaseUserName(), this.getDatabaseUserPassword());
+      SQLConnector.getInstance().setConnection(DriverManager.getConnection(dbUrl, SQLConnector.getInstance().getDatabaseUserName(), SQLConnector.getInstance().getDatabaseUserPassword()));
 
-      System.out.printf("%sSuccessfully connected to database.%s\n", this.BLUE_COLOR, this.RESET);
+      System.out.printf("%sSuccessfully connected to database.%s\n", "\u001B[32m", "\033[0m");
     } catch (SQLException sqlException) {
       System.err.println(sqlException.getMessage());
     }
-
-    return connection;
   }
 
   @Override
   protected void init() {
-    this.setDriverName("com.mysql.cj.jdbc.Driver");
+    SQLConnector.getInstance().setDriverName("com.mysql.cj.jdbc.Driver");
   }
 
   public static SQLConnector getInstance() {
@@ -141,6 +129,8 @@ public class SQLConnector extends DbConnector {
       synchronized (SQLConnector.class) {
         if (instance == null) {
           instance = new SQLConnector();
+          instance.setDriverName("com.mysql.cj.jdbc.Driver");
+          instance.connect("projet_master1_jee", "root", "");
         }
       }
     }
@@ -152,5 +142,7 @@ public class SQLConnector extends DbConnector {
                             Constructors
    ------------------------------------------------------------------*/
 
-  private SQLConnector() { }
+  private SQLConnector() {
+
+  }
 }

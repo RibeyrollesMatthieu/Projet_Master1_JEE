@@ -23,10 +23,10 @@
               action="" method="post">
 
           <div class="mb-4">
-            <t:input id="email" type="email" placeholder="Email address" autofocus="true" length="${sessionScope.columnsLength.get('email')}" />
+            <t:input id="email" type="email" placeholder="Email address" autofocus="true" length="${sessionScope.usersColumnsLength.get('email')}" />
           </div>
           <div class="mb-4">
-            <t:input id="password" type="password" placeholder="Password" length="${sessionScope.columnsLength.get('password')}"/>
+            <t:input id="password" type="password" placeholder="Password" length="${sessionScope.usersColumnsLength.get('password')}"/>
           </div>
 
           <div class="mb-4">

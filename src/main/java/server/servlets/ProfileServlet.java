@@ -49,8 +49,6 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
     final int ID = (int) req.getSession().getAttribute("id");
     final UserBean user = (UserBean) req.getSession().getAttribute("user");
 
-    SQLConnector.getInstance().connect("projet_master1_jee", "root", "");
-
     try {
       if (! params.get("firstname")[0].equals(user.getFirstname())){
         user.setFirstname(params.get("firstname")[0]);

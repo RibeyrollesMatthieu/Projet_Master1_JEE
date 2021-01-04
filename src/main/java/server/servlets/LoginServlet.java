@@ -27,11 +27,9 @@ public class LoginServlet extends HttpServlet implements FormsMethods, ServletMe
   private ResultSet connect(HttpServletRequest req, String email) throws SQLException {
     assert email != null: "Email cannot be null";
 
-    SQLConnector.getInstance().connect("projet_master1_jee", "root", "");
+    ResultSet set = SQLConnector.getInstance().doRequest(String.format("SELECT password, id FROM users WHERE email='%s';", email), false);
 
-    ResultSet set = SQLConnector.getInstance().doRequest(String.format("SELECT password, id FROM users WHERE email='%s'", email), false);
-
-    System.out.print("found user in database\n");
+    System.out.printf("%sfound user in database%s\n", "\u001B[32m", "\u001B[0m");
 
     set.next();
 
@@ -45,21 +43,18 @@ public class LoginServlet extends HttpServlet implements FormsMethods, ServletMe
 
     if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) resp.sendRedirect(req.getContextPath());
     else {
-      HashMap<String, Integer> columnsLength = new HashMap<>();
+      HashMap<String, Integer> usersColumnsLength = new HashMap<>();
 
       try {
-        SQLConnector.getInstance().connect("projet_master1_jee", "root", "");
-
-        ResultSet set = SQLConnector.getInstance().getAllColumns();
-
+        ResultSet set = SQLConnector.getInstance().getAllColumnsFor("users");
 
         while(set.next()) {
           for (int i = 1; i <= set.getMetaData().getColumnCount(); i++) {
-            columnsLength.put(set.getString(i), SQLConnector.getInstance().getAllowedSizeForColumnField(set.getString(i)));
+            usersColumnsLength.put(set.getString(i), SQLConnector.getInstance().getAllowedSizeForColumnField("users", set.getString(i)));
           }
         }
 
-        req.getSession().setAttribute("columnsLength", columnsLength);
+        req.getSession().setAttribute("usersColumnsLength", usersColumnsLength);
       } catch (SQLException sqlException) {
         sqlException.printStackTrace();
       }

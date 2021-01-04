@@ -23,16 +23,11 @@ public class RelationServlet extends HttpServlet {
   // private
   //TODO ajax this request (from the caller i guess)
   private void sendFriendRequest(int from, int to) {
-    //TODO chekc if both users exist
+    //TODO check if both users exist? or exception is enough
     try {
-      SQLConnector.getInstance().connect("projet_master1_jee", "root", "");
-      SQLConnector.getInstance().doRequest(String.format(
-        "INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'P');", from, to
-        ), true);
+      SQLConnector.getInstance().doRequest(String.format("INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'P');", from, to), true);
 
-      SQLConnector.getInstance().doRequest(String.format(
-        "INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'P');", to, from
-      ), true);
+      SQLConnector.getInstance().doRequest(String.format("INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'P');", to, from), true);
     } catch (SQLException sqlException) {
       System.err.println("An error has occurred while sending the friend request.");
 //      sqlException.printStackTrace();

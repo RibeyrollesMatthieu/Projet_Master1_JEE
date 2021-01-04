@@ -36,11 +36,8 @@ public class FriendsServlet extends HttpServlet {
 
       ResultSet set = SQLConnector.getInstance().getFriendsOf(Integer.parseInt(req.getSession().getAttribute("id").toString()));
 
-      System.out.printf("Ceci est le set: %s\n", set);
       try {
-        System.out.println("on rentre dans le try");
         while(set.next()) {
-          System.out.println("on rentre dans le while");
           for (int i = 1; i <= set.getMetaData().getColumnCount(); i++) {
             System.out.println(set.getString(i));
           }

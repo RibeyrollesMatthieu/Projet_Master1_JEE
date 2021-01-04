@@ -12,8 +12,6 @@ import java.sql.ResultSet;
  */
 public interface ServletMethods {
   default void createUserBean(HttpServletRequest req) {
-    SQLConnector.getInstance().connect("projet_master1_jee", "root", "");
-
     try {
       final ResultSet rs = SQLConnector.getInstance().getUser((Integer) req.getSession().getAttribute("id"));
       UserBean userBean = new UserBean();
