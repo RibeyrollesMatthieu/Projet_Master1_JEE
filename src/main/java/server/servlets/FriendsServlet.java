@@ -42,7 +42,6 @@ public class FriendsServlet extends HttpServlet {
 
         while(set.next()) {
           UserBean friend = new UserBean();
-          for (int i = 1; i <=set.getMetaData().getColumnCount(); i++) System.out.println(set.getObject(i));
           ResultSet friendSet = SQLConnector.getInstance().getUser(set.getInt(1));
           friendSet.next();
 

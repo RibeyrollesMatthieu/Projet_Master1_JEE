@@ -10,7 +10,7 @@
 <html>
   <header>
     <nav class="flex py-3 px-4 fixed top-0 left-0 right-0 items-center justify-between
-          bg-gray-300 dark:bg-gray-900">
+          bg-gray-300 dark:bg-gray-900 z-90">
 
 
       <a href="${pageContext.request.contextPath}/profile" class="text-xl text-bold hover:text-yellow-700">
