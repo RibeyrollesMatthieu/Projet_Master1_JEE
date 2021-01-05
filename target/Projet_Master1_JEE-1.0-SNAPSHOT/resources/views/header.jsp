@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <html>
   <header>
@@ -24,7 +25,7 @@
       <a href="${pageContext.request.contextPath}/"
          class="text-2xl text-bold"> Covid Tracker </a>
 
-      <a href="${pageContext.request.contextPath}/covided" class="text-xl text-bold hover:text-yellow-700">
+      <a id="covid-button" class="text-xl text-bold hover:text-yellow-700 cursor-pointer">
         <i class="fa fa-lg fas fa-exclamation-triangle"></i>
       </a>
 
@@ -33,4 +34,23 @@
       </a>
     </nav>
   </header>
+
+  <t:covided_alert />
+
+
+  <script>
+      const covidButton = document.getElementById("covid-button");
+      const popupCross = document.getElementById("popup-cross");
+      const popup = document.getElementById("covid-popup");
+      const closeButton = document.getElementById("popup_close_button");
+
+      const popupAction = () => {
+          if (popup.classList.contains("hidden")) popup.classList.remove("hidden");
+          else popup.classList.add("hidden");
+      }
+
+      covidButton.onclick = popupAction;
+      closeButton.onclick = popupAction;
+      popupCross.onclick = popupAction;
+  </script>
 </html>

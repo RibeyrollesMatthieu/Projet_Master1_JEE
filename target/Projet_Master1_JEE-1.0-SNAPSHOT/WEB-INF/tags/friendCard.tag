@@ -30,12 +30,17 @@
     </td>
 
     <td class="px-6 py-4 whitespace-nowrap text-right">
-      <a href="#" class="text-blue-600 noselect"> See profile </a>
+      <a href="#" class="text-blue-600 hover:text-blue-800 noselect">
+        <span class="hidden sm:block"> See profile </span>
+        <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user"></i> </span>
+      </a>
     </td>
 
     <td class="px-6 py-4 whitespace-nowrap text-right">
-      <a href="#" class="text-red-600 noselect"> Remove friend </a>
+      <a href="#" class="text-red-600 hover:text-red-800 noselect">
+        <span class="hidden sm:block"> Remove friends </span>
+        <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user-times"></i> </span>
+      </a>
     </td>
-
   </tr>
 </html>
