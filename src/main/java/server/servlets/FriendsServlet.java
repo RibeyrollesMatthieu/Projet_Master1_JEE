@@ -51,6 +51,7 @@ public class FriendsServlet extends HttpServlet {
           friend.setEmail(friendSet.getString("email"));
           friend.setBdate(friendSet.getDate("birthdate"));
           friend.setCovided(friendSet.getBoolean("covided"));
+          friend.setPassword("What a bad idea");
 
           user.addFriend(friend);
         }

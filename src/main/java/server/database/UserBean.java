@@ -3,6 +3,7 @@ package server.database;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * @author Ribeyrolles Matthieu
@@ -70,7 +71,8 @@ public class UserBean {
   }
   public void setCovided(boolean covided) { isCovided = covided; }
   public void addPendingId(int i) { this.pendingIds.add(i); }
-  public void addFriend(UserBean userBean) { this.friends.add(userBean); }
+  public void addFriend(UserBean userBean) { this.friends.add(userBean);
+    System.out.println(this.friends);}
 
   // private
   // public
@@ -86,8 +88,24 @@ public class UserBean {
       '}';
   }
 
+  @Override
+  public int hashCode() {
+    return Objects.hash(email);
+  }
 
-   /*------------------------------------------------------------------
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    System.out.println(o);
+    if (!(o instanceof UserBean)) return false;
+
+    System.out.println(this.email);
+    System.out.println(((UserBean) o).getEmail());
+
+    return this.email.equals(((UserBean) o).getEmail());
+  }
+
+  /*------------------------------------------------------------------
                             Constructors
    ------------------------------------------------------------------*/
 
