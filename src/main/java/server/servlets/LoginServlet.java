@@ -50,6 +50,7 @@ public class LoginServlet extends HttpServlet implements FormsMethods, ServletMe
 
         while(set.next()) {
           for (int i = 1; i <= set.getMetaData().getColumnCount(); i++) {
+            System.out.printf("Current column: %s, size: %d\n", set.getString(i), SQLConnector.getInstance().getAllowedSizeForColumnField("users", set.getString(i)));
             usersColumnsLength.put(set.getString(i), SQLConnector.getInstance().getAllowedSizeForColumnField("users", set.getString(i)));
           }
         }

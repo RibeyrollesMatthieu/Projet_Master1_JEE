@@ -27,15 +27,15 @@
           <form id="register-form" class="flex-1 rounded shadow shadow-white p-5 bg-gray-200 dark:bg-gray-700 text-black"
                 action="" method="post">
             <div class="mb-4">
-              <t:input id="firstname" type="text" placeholder="Firstname" autofocus='true' label="true" value="${sessionScope.user.getFirstname()}" length="${sessionScope.columnsLength.get('firstname')}"/>
+              <t:input id="firstname" type="text" placeholder="Firstname&nbsp;" autofocus='true' label="true" value="${sessionScope.user.getFirstname()}" length="${sessionScope.columnsLength.get('firstname')}"/>
             </div>
 
             <div class="mb-4">
-              <t:input id="lastname" type="text" placeholder="Lastname" label="true" value="${sessionScope.user.getLastname()}" length="${sessionScope.columnsLength.get('lastname')}"/>
+              <t:input id="lastname" type="text" placeholder="Lastname&nbsp;" label="true" value="${sessionScope.user.getLastname()}" length="${sessionScope.columnsLength.get('lastname')}"/>
             </div>
 
             <div class="mb-4">
-              <t:input id="password" type="password" placeholder="New password" label="true" label_text="Password" length="${sessionScope.columnsLength.get('password')}"/>
+              <t:input id="password" type="password" placeholder="New password&nbsp;" label="true" label_text="Password&nbsp;" length="${sessionScope.columnsLength.get('password')}"/>
             </div>
 
             <div class="mb-4">
@@ -43,7 +43,7 @@
             </div>
 
             <div class="mb-4">
-              <t:input id="date" type="text" placeholder="Birthdate" label="true" value="${sessionScope.user.getBdate()}" length="${sessionScope.columnsLength.get('birthdate')}"/>
+              <t:input id="date" type="text" placeholder="Birthdate&nbsp;" label="true" value="${sessionScope.user.getBdate()}" length="${sessionScope.columnsLength.get('birthdate')}"/>
             </div>
 
             <button id="register-submit-button" class="bg-yellow-600 font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed text-white" type="submit">

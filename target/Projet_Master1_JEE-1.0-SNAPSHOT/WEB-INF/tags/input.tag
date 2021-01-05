@@ -19,7 +19,6 @@
         <c:when test="${label_text != null}"> ${label_text} </c:when>
         <c:otherwise> ${placeholder} </c:otherwise>
       </c:choose>
-         &nbsp;
     </label></span>
   </c:if>
 

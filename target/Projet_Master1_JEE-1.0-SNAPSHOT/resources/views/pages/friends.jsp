@@ -15,7 +15,6 @@
   <body>
     <jsp:include page="../header.jsp" />
 
-
     <t:page>
       <div> <h1 class="text-5xl text-center mt-5"> My friends </h1> </div>
       <div class="flex flex-column mt-9 justify-center">
