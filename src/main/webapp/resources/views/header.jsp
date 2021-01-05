@@ -43,6 +43,7 @@
       const popupCross = document.getElementById("popup-cross");
       const popup = document.getElementById("covid-popup");
       const closeButton = document.getElementById("popup_close_button");
+      const submitCovid = document.getElementById("covidButtonSubmit");
 
       const popupAction = () => {
           if (popup.classList.contains("hidden")) popup.classList.remove("hidden");

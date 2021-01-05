@@ -82,6 +82,17 @@
   </servlet-mapping>
 
 
+  <servlet>
+    <servlet-name>servlets.CovidedServlet</servlet-name>
+    <servlet-class>server.servlets.CovidedServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>servlets.CovidedServlet</servlet-name>
+    <url-pattern>/covided</url-pattern>
+  </servlet-mapping>
+
+
 
   <error-page>
     <error-code>404</error-code>

@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="h-20 flex items-center justify-center between-5 space-x-6">
-          <a href="${pageContext.request.contextPath}/covided" class="bg-green-200 rounded-full px-4 py-3 transition duration-300 ease-in-out hover:bg-green-300 mr-6">
+          <a id="covidButtonSubmit" class="cursor-pointer bg-green-200 rounded-full px-4 py-3 transition duration-300 ease-in-out hover:bg-green-300 mr-6">
             Yes, I am covided
           </a>
           <a id="popup_close_button" class="bg-red-200 cursor-pointer rounded-full px-4 py-3 transition duration-300 ease-in-out hover:bg-red-300 mr-6">
@@ -25,4 +25,15 @@
       </div>
     </div>
   </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script>
+    const covidSubmitButton = $("#covidButtonSubmit");
+
+    $(covidSubmitButton).click(() => {
+        $.post('covided');
+        popupAction();
+    })
+  </script>
 </body>
