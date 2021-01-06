@@ -2,6 +2,8 @@
 <%@attribute name="firstname" required="true" %>
 <%@attribute name="lastname" required="true" %>
 <%@attribute name="covided" required="true" %>
+<%@attribute name="isFriend" required="true" %>
+<%@attribute name="requestFromMe" required="false" %>
 
 <html>
   <tr class="hover:bg-gray-300 <%--cursor-pointer--%>">
@@ -18,29 +20,70 @@
       </div>
     </td>
 
-<%--    <td class="px-6 py-4 whitespace-nowrap">--%>
-<%--      <div class="text-sm text-gray-900 noselect">Regional Paradigm Technician</div>--%>
-<%--      <div class="text-sm text-gray-500 noselect">Optimization</div>--%>
-<%--    </td>--%>
+    <% if (isFriend.equals("true")) { %>
+      <td class="px-6 py-4 whitespace-nowrap">
+        <span class="px-2 inline-flex leading-5 noselect ${covided ? "text-red-600" : "text-green-600"}">
+          ${covided ? "Covided" : "Safe" }
+        </span>
+      </td>
 
-    <td class="px-6 py-4 whitespace-nowrap">
-      <span class="px-2 inline-flex leading-5 noselect ${covided ? "text-red-600" : "text-green-600"}">
-        ${covided ? "Covided" : "Safe"}
-      </span>
-    </td>
+      <td class="px-6 py-4 whitespace-nowrap text-right">
+        <a href="#" class="text-blue-600 hover:text-blue-800 noselect">
+          <span class="hidden sm:block"> See profile </span>
+          <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user"></i> </span>
+        </a>
+      </td>
 
-    <td class="px-6 py-4 whitespace-nowrap text-right">
-      <a href="#" class="text-blue-600 hover:text-blue-800 noselect">
-        <span class="hidden sm:block"> See profile </span>
-        <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user"></i> </span>
-      </a>
-    </td>
+      <td class="px-6 py-4 whitespace-nowrap text-right">
+        <a href="#" class="text-red-600 hover:text-red-800 noselect">
+          <span class="hidden sm:block"> Remove friends </span>
+          <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user-times"></i> </span>
+        </a>
+      </td>
 
-    <td class="px-6 py-4 whitespace-nowrap text-right">
-      <a href="#" class="text-red-600 hover:text-red-800 noselect">
-        <span class="hidden sm:block"> Remove friends </span>
-        <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user-times"></i> </span>
-      </a>
-    </td>
+    <% } else if (requestFromMe.equals("false")) { %>
+      <td class="px-6 py-4 whitespace-nowrap text-right">
+        <a href="#" class="text-blue-600 hover:text-blue-800 noselect">
+          <span class="hidden sm:block"> See profile </span>
+          <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user"></i> </span>
+        </a>
+      </td>
+
+      <td class="px-6 py-4 whitespace-nowrap text-right">
+        <a href="#" class="text-green-600 hover:text-green-800 noselect">
+          <span class="hidden sm:block"> Accept </span>
+          <span class="block sm:hidden"> <i class="fas fa fa-lg fa-check"></i> </span>
+        </a>
+      </td>
+
+      <td class="px-6 py-4 whitespace-nowrap text-right">
+        <a href="#" class="text-red-600 hover:text-red-800 noselect">
+          <span class="hidden sm:block"> Decline </span>
+          <span class="block sm:hidden"> <i class="fas fa fa-lg fa-times"></i> </span>
+        </a>
+      </td>
+
+    <% } else { %>
+
+      <td class="px-6 py-4 whitespace-nowrap text-right">
+        <span class="hidden sm:block px-2 inline-flex leading-5 noselect text-blue-600">
+          You sent an invite
+        </span>
+      </td>
+
+      <td class="px-6 py-4 whitespace-nowrap text-right">
+        <a href="#" class="text-blue-600 hover:text-blue-800 noselect">
+          <span class="hidden sm:block"> See profile </span>
+          <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user"></i> </span>
+        </a>
+      </td>
+
+      <td class="px-6 py-4 whitespace-nowrap text-right">
+        <a href="#" class="text-red-600 hover:text-red-800 noselect">
+          <span class="hidden sm:block"> Cancel </span>
+          <span class="block sm:hidden"> <i class="fas fa fa-lg fa-times"></i> </span>
+        </a>
+      </td>
+    <% } %>
   </tr>
 </html>

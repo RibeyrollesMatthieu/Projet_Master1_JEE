@@ -35,11 +35,13 @@
                 <tbody id="friends-changing-content" class="bg-white divide-y divide-gray-200">
                   <c:choose>
                     <c:when test="${param.get('cat') == 'pending'}">
-                      <c:forEach items="${sessionScope.user.getPending()}" var="friendBean">
+                      <c:forEach items="${sessionScope.user.getPending()}" var="pendingBean">
                         <t:friendCard
-                          firstname="${friendBean.getFirstname()}"
-                          lastname="${friendBean.getLastname()}"
-                          covided="${friendBean.isCovided()}"/>
+                          firstname="${pendingBean.getFirstname()}"
+                          lastname="${pendingBean.getLastname()}"
+                          covided="${pendingBean.isCovided()}"
+                          isFriend="false"
+                          requestFromMe='${pendingBean.isRequestSentFromCurrentUser()}'/>
                       </c:forEach>
                     </c:when>
 
@@ -48,7 +50,8 @@
                         <t:friendCard
                           firstname="${friendBean.getFirstname()}"
                           lastname="${friendBean.getLastname()}"
-                          covided="${friendBean.isCovided()}"/>
+                          covided="${friendBean.isCovided()}"
+                          isFriend="true" />
                       </c:forEach>
                     </c:otherwise>
                   </c:choose>

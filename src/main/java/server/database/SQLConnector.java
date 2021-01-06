@@ -34,14 +34,40 @@ public class SQLConnector extends DbConnector {
       , false);
   }
 
+  public ResultSet getPendingInvitesISent(int id) {
+    try {
+      ResultSet set = SQLConnector.getInstance().doRequest(String.format(
+        "SELECT _to FROM friendship WHERE _from = %d AND status = 'P'", id), false);
+
+      return set;
+    } catch (SQLException sqlException) {
+      sqlException.printStackTrace();
+    }
+
+    return null;
+  }
+
+  public ResultSet getPendingsWeSentMe(int id) {
+    try {
+      ResultSet set = SQLConnector.getInstance().doRequest(String.format(
+        "SELECT _from FROM friendship WHERE _to = %d AND status = 'P';", id), false);
+
+      return set;
+    } catch (SQLException sqlException) {
+      sqlException.printStackTrace();
+    }
+
+    return null;
+  }
+
   @Override
-  public ResultSet getFriendsOf(int id, String status) {
+  public ResultSet getFriendsOf(int id) {
     //FIXME does it check on purpose the fact that after 48, there's no more 47 (CRESC IDS)
     try {
       ResultSet set = SQLConnector.getInstance().doRequest(String.format(
         "SELECT _to FROM friendship " +
         "WHERE _from = %d " +
-        "AND status = '%s';", id, status.toUpperCase()), false);
+        "AND status = 'F';", id), false);
 
       return set;
     } catch (SQLException sqlException) {

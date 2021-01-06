@@ -13,7 +13,7 @@ public class UserBean {
   private Date bdate;
   private boolean isCovided;
   private HashSet<UserBean> friends;
-  private HashSet<UserBean> pending;
+  private HashSet<PendingBean> pending;
 
   /*------------------------------------------------------------------
                               Methods
@@ -45,7 +45,7 @@ public class UserBean {
 
   public HashSet<UserBean> getFriends() { return friends; }
 
-  public HashSet<UserBean> getPending() { return pending; }
+  public HashSet<PendingBean> getPending() { return pending; }
   // settersHashSet
 
   public void setBdate(Date bdate) {
@@ -65,7 +65,7 @@ public class UserBean {
   }
   public void setCovided(boolean covided) { isCovided = covided; }
   public void addFriend(UserBean userBean) { this.friends.add(userBean); }
-  public void addPending(UserBean userBean) { this.pending.add(userBean); }
+  public void addPending(PendingBean pendingBean) { this.pending.add(pendingBean); }
 
   // private
   // public
