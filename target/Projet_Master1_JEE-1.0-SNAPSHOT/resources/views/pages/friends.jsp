@@ -107,10 +107,26 @@
 
     }
 
+    async function postAcceptRequest(id) { $.post('relation-update?accept=' + id); }
+    async function postDelete(id) { $.post('relation-update?delete=' + id); }
+    async function postCancelRequest(id) { $.post('relation-update?cancel=' + id); }
 
-    const deleteFriend = (element) => {
-        $.post('relation-update?delete=' + element);
-        reload();
+    const acceptFriendRequest = (id) => {
+      postAcceptRequest(id)
+        .then(reload)
+        .catch(() => console.log("Cannot post the accept friend request"));
+    }
+
+    const deleteFriend = (id) => {
+      postDelete(id)
+        .then(reload)
+        .catch(() => console.log("Cannot post the delete friend request."));
+    }
+
+    const cancelFriendRequest = (id) => {
+      postCancelRequest(id)
+        .then(reload)
+        .catch(() => console.log("Cannot post the cancel friend request."));
     }
 
     changeBackgrounds(true);

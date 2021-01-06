@@ -101,9 +101,6 @@ public class UserBean {
     if (this == o) return true;
     if (!(o instanceof UserBean)) return false;
 
-    System.out.println(this.email);
-    System.out.println(((UserBean) o).getEmail());
-
     return this.email.equals(((UserBean) o).getEmail());
   }
 

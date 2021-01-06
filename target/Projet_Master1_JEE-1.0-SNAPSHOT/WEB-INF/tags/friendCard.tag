@@ -36,7 +36,7 @@
       </td>
 
       <td class="px-6 py-4 whitespace-nowrap text-right">
-        <a id="delete-friend" class="cursor-pointer text-red-600 hover:text-red-800 noselect" onclick="deleteFriend(${id})">
+        <a class="cursor-pointer text-red-600 hover:text-red-800 noselect" onclick="deleteFriend(${id})">
           <span class="hidden sm:block"> Remove friends </span>
           <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user-times"></i> </span>
         </a>
@@ -51,7 +51,7 @@
       </td>
 
       <td class="px-6 py-4 whitespace-nowrap text-right">
-        <a href="#" class="text-green-600 hover:text-green-800 noselect">
+        <a class="cursor-pointer text-green-600 hover:text-green-800 noselect" onclick="acceptFriendRequest(${id})">
           <span class="hidden sm:block"> Accept </span>
           <span class="block sm:hidden"> <i class="fas fa fa-lg fa-check"></i> </span>
         </a>
@@ -80,7 +80,7 @@
       </td>
 
       <td class="px-6 py-4 whitespace-nowrap text-right">
-        <a href="#" class="text-red-600 hover:text-red-800 noselect">
+        <a class="cursor-pointer text-red-600 hover:text-red-800 noselect" onclick="cancelFriendRequest(${id})">
           <span class="hidden sm:block"> Cancel </span>
           <span class="block sm:hidden"> <i class="fas fa fa-lg fa-times"></i> </span>
         </a>

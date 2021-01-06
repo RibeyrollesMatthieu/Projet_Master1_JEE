@@ -35,8 +35,33 @@ public class RelationServlet extends HttpServlet {
     }
   }
 
+  private void declineRequest() {
+
+  }
+
+  private void cancelRequest(int id1, int id2) {
+    try {
+      SQLConnector.getInstance().doRequest(String.format("DELETE FROM friendship WHERE _from = %d AND _to = %d AND status = 'P'", id1, id2), true);
+    } catch (SQLException sqlException) {
+      sqlException.printStackTrace();
+//      System.err.println("An error has occured while trying to cancel the friend request you sent.");
+    }
+  }
+
+  private void acceptFriendRequest(int id1, int id2) {
+    try {
+      SQLConnector.getInstance().doRequest(String.format(
+        "UPDATE friendship " +
+        "SET status = 'F' " +
+        "WHERE _from = %d AND _to = %d", id2, id1), true);
+
+      SQLConnector.getInstance().doRequest(String.format("INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'F');", id1, id2), true);
+    } catch (SQLException sqlException) {
+      System.err.println("An error has occured while trying to accept the friend request");
+    }
+  }
+
   private void removeFriend(int id1, int id2) {
-    System.out.println("coucou");
     try {
       SQLConnector.getInstance().doRequest(String.format("DELETE FROM friendship WHERE _from = %d AND _to = %d", id1, id2), true);
       SQLConnector.getInstance().doRequest(String.format("DELETE FROM friendship WHERE _from = %d AND _to = %d", id2, id1), true);
@@ -54,6 +79,14 @@ public class RelationServlet extends HttpServlet {
 
     if (req.getParameter("delete") != null) {
       this.removeFriend(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("delete")));
+    }
+
+    if (req.getParameter("accept") != null) {
+      this.acceptFriendRequest(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("accept")));
+    }
+
+    if (req.getParameter("cancel") != null) {
+      this.cancelRequest(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("cancel")));
     }
 
     resp.sendRedirect(req.getContextPath() + "/friends");
