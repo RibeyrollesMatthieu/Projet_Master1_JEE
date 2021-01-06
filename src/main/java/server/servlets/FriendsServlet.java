@@ -51,6 +51,7 @@ public class FriendsServlet extends HttpServlet {
           ResultSet friendSet = SQLConnector.getInstance().getUser(setOfFriends.getInt(1));
           friendSet.next();
 
+          friend.setId(friendSet.getInt("id"));
           friend.setFirstname(friendSet.getString("firstname"));
           friend.setLastname(friendSet.getString("lastname"));
           friend.setCovided(friendSet.getBoolean("covided"));
@@ -64,6 +65,7 @@ public class FriendsServlet extends HttpServlet {
           ResultSet pendingSet = SQLConnector.getInstance().getUser(setOfPendingsISent.getInt(1));
           pendingSet.next();
 
+          pending.setId(pendingSet.getInt("id"));
           pending.setFirstname(pendingSet.getString("firstname"));
           pending.setLastname(pendingSet.getString("lastname"));
           pending.setEmail(pendingSet.getString("email"));
@@ -77,6 +79,7 @@ public class FriendsServlet extends HttpServlet {
           ResultSet pendingSet = SQLConnector.getInstance().getUser(setOfPendingsIReceived.getInt(1));
           pendingSet.next();
 
+          pending.setId(pendingSet.getInt("id"));
           pending.setFirstname(pendingSet.getString("firstname"));
           pending.setLastname(pendingSet.getString("lastname"));
           pending.setEmail(pendingSet.getString("email"));

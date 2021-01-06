@@ -40,6 +40,7 @@
                           firstname="${pendingBean.getFirstname()}"
                           lastname="${pendingBean.getLastname()}"
                           covided="${pendingBean.isCovided()}"
+                          id="${pendingBean.getId()}"
                           isFriend="false"
                           requestFromMe='${pendingBean.isRequestSentFromCurrentUser()}'/>
                       </c:forEach>
@@ -51,6 +52,7 @@
                           firstname="${friendBean.getFirstname()}"
                           lastname="${friendBean.getLastname()}"
                           covided="${friendBean.isCovided()}"
+                          id="${friendBean.getId()}"
                           isFriend="true" />
                       </c:forEach>
                     </c:otherwise>
@@ -103,6 +105,12 @@
           }
       }
 
+    }
+
+
+    const deleteFriend = (element) => {
+        $.post('relation-update?delete=' + element);
+        reload();
     }
 
     changeBackgrounds(true);

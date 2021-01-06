@@ -3,6 +3,7 @@
 <%@attribute name="lastname" required="true" %>
 <%@attribute name="covided" required="true" %>
 <%@attribute name="isFriend" required="true" %>
+<%@attribute name="id" required="true" %>
 <%@attribute name="requestFromMe" required="false" %>
 
 <html>
@@ -35,7 +36,7 @@
       </td>
 
       <td class="px-6 py-4 whitespace-nowrap text-right">
-        <a href="#" class="text-red-600 hover:text-red-800 noselect">
+        <a id="delete-friend" class="cursor-pointer text-red-600 hover:text-red-800 noselect" onclick="deleteFriend(${id})">
           <span class="hidden sm:block"> Remove friends </span>
           <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user-times"></i> </span>
         </a>

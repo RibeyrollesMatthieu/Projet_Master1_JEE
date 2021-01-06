@@ -24,27 +24,37 @@ public class RelationServlet extends HttpServlet {
   //TODO:ajax this request (from the caller i guess)
 
   //TODO: prevent to send to ourself a request
-  private void sendFriendRequest(int from, int to) {
+  private void sendFriendRequest(int id1, int id2) {
     //TODO check if both users exist? or exception is enough
     try {
-      SQLConnector.getInstance().doRequest(String.format("INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'P');", from, to), true);
-
-      SQLConnector.getInstance().doRequest(String.format("INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'P');", to, from), true);
+      SQLConnector.getInstance().doRequest(String.format("INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'P');", id1, id2), true);
+      SQLConnector.getInstance().doRequest(String.format("INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'P');", id2, id1), true);
     } catch (SQLException sqlException) {
       System.err.println("An error has occurred while sending the friend request.");
 //      sqlException.printStackTrace();
+    }
+  }
+
+  private void removeFriend(int id1, int id2) {
+    System.out.println("coucou");
+    try {
+      SQLConnector.getInstance().doRequest(String.format("DELETE FROM friendship WHERE _from = %d AND _to = %d", id1, id2), true);
+      SQLConnector.getInstance().doRequest(String.format("DELETE FROM friendship WHERE _from = %d AND _to = %d", id2, id1), true);
+    } catch (SQLException sqlException) {
+      System.err.println("An error has occured while trying to remove a friend.");
     }
   }
   // public
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    assert  req.getParameter("from") != null &&
-            req.getParameter("to") != null &&
-            req.getParameter("status") != null: "cannot add a friend cause missing information";
+    if (req.getParameter("add") != null) {
+      this.sendFriendRequest(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("add")));
+    }
 
-    if (req.getParameter("status").toUpperCase().equals("P"))
-      this.sendFriendRequest(Integer.parseInt(req.getParameter("from")), Integer.parseInt(req.getParameter("to")));
+    if (req.getParameter("delete") != null) {
+      this.removeFriend(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("delete")));
+    }
 
     resp.sendRedirect(req.getContextPath() + "/friends");
   }

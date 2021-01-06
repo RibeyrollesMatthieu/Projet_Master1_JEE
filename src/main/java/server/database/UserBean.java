@@ -11,6 +11,7 @@ import java.util.Objects;
 public class UserBean {
   private String firstname, lastname, email, password;
   private Date bdate;
+  private int id;
   private boolean isCovided;
   private HashSet<UserBean> friends;
   private HashSet<PendingBean> pending;
@@ -37,6 +38,10 @@ public class UserBean {
     return password;
   }
 
+  public int getId() {
+    return id;
+  }
+
   public Date getBdate() {
     return bdate;
   }
@@ -47,6 +52,11 @@ public class UserBean {
 
   public HashSet<PendingBean> getPending() { return pending; }
   // settersHashSet
+
+
+  public void setId(int id) {
+    this.id = id;
+  }
 
   public void setBdate(Date bdate) {
     this.bdate = bdate;
