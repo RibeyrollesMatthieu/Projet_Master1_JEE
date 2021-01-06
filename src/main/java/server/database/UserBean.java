@@ -1,6 +1,5 @@
 package server.database;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -14,8 +13,7 @@ public class UserBean {
   private Date bdate;
   private boolean isCovided;
   private HashSet<UserBean> friends;
-  private HashSet<Integer> friendsIds;
-  private HashSet<Integer> pendingIds;
+  private HashSet<UserBean> pending;
 
   /*------------------------------------------------------------------
                               Methods
@@ -45,10 +43,9 @@ public class UserBean {
 
   public boolean isCovided() { return isCovided; }
 
-  public HashSet<Integer> getFriendsIds() { return friendsIds; }
   public HashSet<UserBean> getFriends() { return friends; }
-  public HashSet<Integer> getPendingIds() { return pendingIds; }
 
+  public HashSet<UserBean> getPending() { return pending; }
   // settersHashSet
 
   public void setBdate(Date bdate) {
@@ -66,13 +63,9 @@ public class UserBean {
   public void setPassword(String password) {
     this.password = password;
   }
-  public void addFriendId(int i) {
-    this.friendsIds.add(i);
-  }
   public void setCovided(boolean covided) { isCovided = covided; }
-  public void addPendingId(int i) { this.pendingIds.add(i); }
-  public void addFriend(UserBean userBean) { this.friends.add(userBean);
-    System.out.println(this.friends);}
+  public void addFriend(UserBean userBean) { this.friends.add(userBean); }
+  public void addPending(UserBean userBean) { this.pending.add(userBean); }
 
   // private
   // public
@@ -96,7 +89,6 @@ public class UserBean {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    System.out.println(o);
     if (!(o instanceof UserBean)) return false;
 
     System.out.println(this.email);
@@ -110,8 +102,7 @@ public class UserBean {
    ------------------------------------------------------------------*/
 
   public UserBean() {
-    this.friendsIds = new HashSet<>();
-    this.pendingIds = new HashSet<>();
     this.friends = new HashSet<>();
+    this.pending = new HashSet<>();
   }
 }

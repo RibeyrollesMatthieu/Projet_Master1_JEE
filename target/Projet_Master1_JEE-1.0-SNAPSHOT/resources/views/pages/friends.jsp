@@ -28,13 +28,30 @@
             <div class="shadow overflow-hidden border-b border-gray-200 rounded-lg">
 
               <table class="min-w-full divide-y divide-gray-200">
-                <tbody class="bg-white divide-y divide-gray-200">
-                  <c:forEach items="${sessionScope.user.getFriends()}" var="friendBean">
-                      <t:friendCard
-                        firstname="${friendBean.getFirstname()}"
-                        lastname="${friendBean.getLastname()}"
-                        covided="${friendBean.isCovided()}"/>
-                    </c:forEach>
+                <div class="text-gray-900 bg-gray-200 flex flex-wrap justify-between text-center">
+                  <div id="friends-display" class="people-display flex-1 p-2 hover:bg-gray-300 cursor-pointer"> Friends </div>
+                  <div id="pending-display" class="people-display flex-1 p-2 hover:bg-gray-300 cursor-pointer"> Pending </div>
+                </div>
+                <tbody id="friends-changing-content" class="bg-white divide-y divide-gray-200">
+                  <c:choose>
+                    <c:when test="${param.get('cat') == 'pending'}">
+                      <c:forEach items="${sessionScope.user.getPending()}" var="friendBean">
+                        <t:friendCard
+                          firstname="${friendBean.getFirstname()}"
+                          lastname="${friendBean.getLastname()}"
+                          covided="${friendBean.isCovided()}"/>
+                      </c:forEach>
+                    </c:when>
+
+                    <c:otherwise>
+                      <c:forEach items="${sessionScope.user.getFriends()}" var="friendBean">
+                        <t:friendCard
+                          firstname="${friendBean.getFirstname()}"
+                          lastname="${friendBean.getLastname()}"
+                          covided="${friendBean.isCovided()}"/>
+                      </c:forEach>
+                    </c:otherwise>
+                  </c:choose>
                 </tbody>
               </table>
             </div>
@@ -43,4 +60,52 @@
       </div>
     </t:page>
   </body>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script>
+    const bg = "bg-gray-300";
+    const pending = document.getElementById("pending-display");
+    const friends = document.getElementById("friends-display");
+    const parent = document.getElementById("friends-changing-content");
+
+    const changeStatus = (target, toActivate) => {
+      if (toActivate) target.classList.add('active', bg);
+      else target.classList.remove('active', bg);
+    }
+
+    const reload = () => {
+      $("#friends-changing-content").load(window.location.href + " #friends-changing-content");
+    }
+
+    const changeBackgrounds = (isFriends) => {
+      const active = (isFriends ? friends : pending).classList.contains('active');
+      if (isFriends) {
+          if (active) {
+            if (pending.classList.contains('active')) changeStatus(friends, false);
+          } else {  // swap side, friends is now active
+            window.history.pushState({}, '', '?cat=friends');
+            reload();
+            changeStatus(friends, true);
+            changeStatus(pending, false);
+          }
+      } else {
+          if (active) {
+            if (friends.classList.contains('active')) changeStatus(pending, false);
+          } else {  //swap sides, pending is ow active
+            window.history.pushState({}, '', '?cat=pending');
+            reload();
+            changeStatus(pending, true);
+            changeStatus(friends, false);
+          }
+      }
+
+    }
+
+    changeBackgrounds(true);
+
+    document.onload = () => changeBackgrounds(true);
+    pending.onclick = () => changeBackgrounds(false);
+    friends.onclick = () => changeBackgrounds(true);
+  </script>
 </html>

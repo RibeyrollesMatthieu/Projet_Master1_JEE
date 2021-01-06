@@ -21,7 +21,9 @@ public class RelationServlet extends HttpServlet {
   // getters
   // setters
   // private
-  //TODO ajax this request (from the caller i guess)
+  //TODO:ajax this request (from the caller i guess)
+
+  //TODO: prevent to send to ourself a request
   private void sendFriendRequest(int from, int to) {
     //TODO check if both users exist? or exception is enough
     try {

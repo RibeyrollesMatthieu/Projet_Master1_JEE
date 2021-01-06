@@ -46,8 +46,14 @@
       const submitCovid = document.getElementById("covidButtonSubmit");
 
       const popupAction = () => {
-          if (popup.classList.contains("hidden")) popup.classList.remove("hidden");
-          else popup.classList.add("hidden");
+          if (popup.classList.contains("hidden")) {
+            document.getElementsByTagName('body')[0].classList.add('overflow-hidden');
+            popup.classList.remove("hidden");
+          }
+          else{
+            document.getElementsByTagName('body')[0].classList.remove('overflow-hidden');
+            popup.classList.add("hidden");
+          }
       }
 
       covidButton.onclick = popupAction;

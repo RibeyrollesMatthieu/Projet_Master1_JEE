@@ -35,13 +35,13 @@ public class SQLConnector extends DbConnector {
   }
 
   @Override
-  public ResultSet getFriendsOf(int id) {
+  public ResultSet getFriendsOf(int id, String status) {
     //FIXME does it check on purpose the fact that after 48, there's no more 47 (CRESC IDS)
     try {
       ResultSet set = SQLConnector.getInstance().doRequest(String.format(
         "SELECT _to FROM friendship " +
         "WHERE _from = %d " +
-        "AND status = 'F';", id), false);
+        "AND status = '%s';", id, status.toUpperCase()), false);
 
       return set;
     } catch (SQLException sqlException) {

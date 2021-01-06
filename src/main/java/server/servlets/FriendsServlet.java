@@ -1,6 +1,5 @@
 package server.servlets;
 
-import server.database.DbConnector;
 import server.database.SQLConnector;
 import server.database.UserBean;
 
@@ -35,11 +34,16 @@ public class FriendsServlet extends HttpServlet {
 
       assert req.getSession().getAttribute("id") != null : "Cannot look at friends because id is null";
 
-      ResultSet set = SQLConnector.getInstance().getFriendsOf(Integer.parseInt(req.getSession().getAttribute("id").toString()));
+      ResultSet set = SQLConnector.getInstance().getFriendsOf(Integer.parseInt(req.getSession().getAttribute("id").toString()), "F");
+      ResultSet set2 = SQLConnector.getInstance().getFriendsOf(Integer.parseInt(req.getSession().getAttribute("id").toString()), "P");
 
       try {
         UserBean user = (UserBean) req.getSession().getAttribute("user");
 
+        user.getFriends().clear();
+        user.getPending().clear();
+
+        //TODO: change this method to when we detect a changment or nah
         while(set.next()) {
           UserBean friend = new UserBean();
           ResultSet friendSet = SQLConnector.getInstance().getUser(set.getInt(1));
@@ -54,8 +58,23 @@ public class FriendsServlet extends HttpServlet {
 
           user.addFriend(friend);
         }
+
+        while (set2.next()) {
+          UserBean friend = new UserBean();
+          ResultSet friendSet = SQLConnector.getInstance().getUser(set2.getInt(1));
+          friendSet.next();
+
+          friend.setFirstname(friendSet.getString("firstname"));
+          friend.setLastname(friendSet.getString("lastname"));
+          friend.setEmail(friendSet.getString("email"));
+          friend.setBdate(friendSet.getDate("birthdate"));
+          friend.setCovided(friendSet.getBoolean("covided"));
+          friend.setPassword("What a bad idea");
+
+          user.addPending(friend);
+        }
       } catch (SQLException sqlException) {
-        sqlException.printStackTrace();
+//        sqlException.printStackTrace();
       }
 
       req.getRequestDispatcher("resources/views/pages/friends.jsp").forward(req, resp);
