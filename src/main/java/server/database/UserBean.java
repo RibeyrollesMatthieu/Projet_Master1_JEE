@@ -1,9 +1,6 @@
 package server.database;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Ribeyrolles Matthieu
@@ -17,6 +14,7 @@ public class UserBean {
   private boolean isCovided;
   private HashSet<UserBean> friends;
   private HashSet<PendingBean> pending;
+  private HashSet<NotificationBean> notificationsBean;
 
   /*------------------------------------------------------------------
                               Methods
@@ -27,30 +25,24 @@ public class UserBean {
   public String getFirstname() {
     return firstname;
   }
-
   public String getLastname() {
     return lastname;
   }
-
   public String getEmail() {
     return email;
   }
-
   public String getPassword() {
     return password;
   }
-
   public int getId() {
     return id;
   }
-
   public Date getBdate() {
     return bdate;
   }
-
   public boolean isCovided() { return isCovided; }
-
   public HashSet<UserBean> getFriends() { return friends; }
+  public HashSet<NotificationBean> getNotificationsBean() { return notificationsBean; }
 
   public boolean isPending(UserBean userBean) {
     for (Iterator<PendingBean> it = this.pending.iterator(); it.hasNext(); ) {
@@ -61,7 +53,6 @@ public class UserBean {
 
     return false;
   }
-
   public boolean getPendingStatus(UserBean userBean) {
     for (Iterator<PendingBean> it = this.pending.iterator(); it.hasNext(); ) {
       PendingBean pendingBean = it.next();
@@ -74,13 +65,19 @@ public class UserBean {
     return false;
   }
   public HashSet<PendingBean> getPending() { return pending; }
-  // settersHashSet
+  public void removeNotification(int id) {
+    for (NotificationBean notificationBean : this.notificationsBean) {
+      if (notificationBean.getId() == id) {
+        this.notificationsBean.remove(notificationBean);
+        return;
+      }
+    }
+  }
 
 
   public void setId(int id) {
     this.id = id;
   }
-
   public void setBdate(Date bdate) {
     this.bdate = bdate;
   }
@@ -99,6 +96,8 @@ public class UserBean {
   public void setCovided(boolean covided) { isCovided = covided; }
   public void addFriend(UserBean userBean) { this.friends.add(userBean); }
   public void addPending(PendingBean pendingBean) { this.pending.add(pendingBean); }
+  public void addNotification(NotificationBean notificationBean) { this.notificationsBean.add(notificationBean); }
+
 
   // private
   // public
@@ -134,5 +133,6 @@ public class UserBean {
   public UserBean() {
     this.friends = new HashSet<>();
     this.pending = new HashSet<>();
+    this.notificationsBean = new HashSet<>();
   }
 }

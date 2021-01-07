@@ -180,6 +180,7 @@
             .catch(() => console.log("Cannot post the send friend request"));
     }
 
+    //FIXME back to last tab when we do an action on a searched user
     const searchUser = (user) => {
         if (user.trim().length === 0) {
           searchDisplay.classList.add('hidden');
@@ -193,8 +194,8 @@
             }
             $.get('friends?search=' + user);
         }
-        reload();
 
+        reload();
     }
 
     changeTab(true);

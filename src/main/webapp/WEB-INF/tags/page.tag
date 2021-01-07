@@ -7,7 +7,7 @@
     </div>
 
     <footer>
-      <div class="py-3 px-4 text-center fixed left-0 bottom-0 right-0 z-40
+      <div class="py-3 px-4 text-center fixed left-0 bottom-0 right-0 z-50
         bg-gray-300 dark:bg-gray-900
         text-gray-700 dark:text-white">
 

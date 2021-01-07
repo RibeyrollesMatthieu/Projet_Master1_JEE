@@ -92,6 +92,16 @@
     <url-pattern>/covided</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>servlets.NotificationsServlet</servlet-name>
+    <servlet-class>server.servlets.NotificationsServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>servlets.NotificationsServlet</servlet-name>
+    <url-pattern>/notifications</url-pattern>
+  </servlet-mapping>
+
 
 
   <error-page>
