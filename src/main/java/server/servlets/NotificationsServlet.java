@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.invoke.StringConcatFactory;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -64,12 +65,16 @@ public class NotificationsServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
     final Object loggedAttribute = req.getSession().getAttribute("logged");
 
     if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) {
 
       assert req.getSession().getAttribute("id") != null : "Cannot look at friends because id is null";
 
+      for (String name : req.getParameterMap().keySet()) {
+        System.out.println(req.getParameter(name));
+      }
       try {
         if (req.getParameter("erase") != null) {
           this.eraseNotif((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getParameter("erase")));

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -28,10 +29,27 @@ public class RelationServlet extends HttpServlet {
     //TODO check if both users exist? or exception is enough
     try {
       SQLConnector.getInstance().doRequest(String.format("INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'P');", id1, id2), true);
+
     } catch (SQLException sqlException) {
       System.err.println("An error has occurred while sending the friend request.");
 //      sqlException.printStackTrace();
     }
+  }
+
+  private void sendFriendRequestNotification(int from, int to) throws SQLException {
+    ResultSet fromNameSet = SQLConnector.getInstance().doRequest("SELECT firstname, lastname FROM users WHERE id = " + from, false);
+    fromNameSet.next();
+
+    String title = String.format("%s %s sent you a friend request!", fromNameSet.getString("firstname"), fromNameSet.getString("lastname").toUpperCase());
+    String content = String.format(
+      "%s sent you a friend request. You now have to decide if you re gonna accept it or decline it. It s up to you!",
+      fromNameSet.getString("firstname")
+    );
+
+    SQLConnector.getInstance().doRequest(String.format(
+      "INSERT INTO notifications(title, content, concernedUser, owner) " +
+      "VALUES('%s', '%s', '%d', '%d')", title, content, to, from
+    ), true);
   }
 
   private void declineRequest(int id1, int id2) {
@@ -79,6 +97,11 @@ public class RelationServlet extends HttpServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     if (req.getParameter("add") != null) {
       this.sendFriendRequest(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("add")));
+      try {
+        this.sendFriendRequestNotification(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("add")));
+      } catch (SQLException sqlException) {
+        sqlException.printStackTrace();
+      }
     }
 
     if (req.getParameter("delete") != null) {
