@@ -55,7 +55,7 @@
         </td>
 
         <td class="px-6 py-4 whitespace-nowrap text-right">
-          <a class="cursor-pointer text-green-600 hover:text-green-800 noselect" onclick="acceptFriendRequest(${id})">
+          <a class="cursor-pointer text-green-600 hover:text-green-800 noselect" onclick="sendFriendRequest(${id})">
             <span class="hidden sm:block"> Send request </span>
             <span class="block sm:hidden"> <i class="fas fa fa-lg fa-check"></i> </span>
           </a>

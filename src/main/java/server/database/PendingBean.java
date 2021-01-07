@@ -36,7 +36,6 @@ public class PendingBean extends UserBean {
 
     if (o instanceof UserBean) {
       UserBean that = (UserBean) o;
-      System.out.println("I am in the good place");
       return that.getEmail().equals(this.getEmail());
     }
 

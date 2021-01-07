@@ -28,7 +28,6 @@ public class RelationServlet extends HttpServlet {
     //TODO check if both users exist? or exception is enough
     try {
       SQLConnector.getInstance().doRequest(String.format("INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'P');", id1, id2), true);
-      SQLConnector.getInstance().doRequest(String.format("INSERT into friendship(_from, _to, status) VALUES(%d, %d, 'P');", id2, id1), true);
     } catch (SQLException sqlException) {
       System.err.println("An error has occurred while sending the friend request.");
 //      sqlException.printStackTrace();
