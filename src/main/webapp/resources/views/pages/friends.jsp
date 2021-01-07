@@ -1,4 +1,4 @@
-<%--
+<%@ page import="server.database.UserBean" %><%--
   Created by IntelliJ IDEA.
   User: Matthieu
   Date: 04/01/2021
@@ -37,12 +37,37 @@
                   <c:choose>
                     <c:when test="${sessionScope.userSearch != null}">
                       <c:forEach items="${sessionScope.userSearch.getSearchResultList()}" var="userSearchResult">
-                        <t:friendCard
-                          firstname="${userSearchResult.getFirstname()}"
-                          lastname="${userSearchResult.getLastname()}"
-                          id="${userSearchResult.getId()}"
-                          isFriend="false"
-                          searchResult="true" />
+
+                        <c:choose>
+                          <c:when test="${sessionScope.user.getFriends().contains(userSearchResult)}">
+                            <t:friendCard
+                              firstname="${userSearchResult.getFirstname()}"
+                              lastname="${userSearchResult.getLastname()}"
+                              id="${userSearchResult.getId()}"
+                              isFriend="true" />
+                          </c:when>
+
+<%--                          FIXME: contains not working--%>
+                          <c:when test="${sessionScope.user.isPending(userSearchResult)}">
+                            <c:set var="isfromMe" value="${sessionScope.user.getPendingStatus(userSearchResult)}" />
+                            <t:friendCard
+                              firstname="${userSearchResult.getFirstname()}"
+                              lastname="${userSearchResult.getLastname()}"
+                              id="${userSearchResult.getId()}"
+                              isFriend="false"
+                              requestFromMe="${isfromMe}"
+                              />
+                          </c:when>
+
+                          <c:otherwise>
+                            <t:friendCard
+                              firstname="${userSearchResult.getFirstname()}"
+                              lastname="${userSearchResult.getLastname()}"
+                              id="${userSearchResult.getId()}"
+                              isFriend="false"
+                              searchResult="true" />
+                          </c:otherwise>
+                        </c:choose>
                       </c:forEach>
                     </c:when>
 
@@ -53,7 +78,6 @@
                             <t:friendCard
                               firstname="${pendingBean.getFirstname()}"
                               lastname="${pendingBean.getLastname()}"
-                              covided="${pendingBean.isCovided()}"
                               id="${pendingBean.getId()}"
                               isFriend="false"
                               requestFromMe='${pendingBean.isRequestSentFromCurrentUser()}'/>

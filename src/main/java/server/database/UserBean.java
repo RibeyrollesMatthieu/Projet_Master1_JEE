@@ -2,6 +2,7 @@ package server.database;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
 
 /**
@@ -9,6 +10,7 @@ import java.util.Objects;
  * 03/01/2021, 15:12
  */
 public class UserBean {
+  //TODO try to use sorted sets
   private String firstname, lastname, email, password;
   private Date bdate;
   private int id;
@@ -50,6 +52,27 @@ public class UserBean {
 
   public HashSet<UserBean> getFriends() { return friends; }
 
+  public boolean isPending(UserBean userBean) {
+    for (Iterator<PendingBean> it = this.pending.iterator(); it.hasNext(); ) {
+      if (it.next().equals(userBean)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public boolean getPendingStatus(UserBean userBean) {
+    for (Iterator<PendingBean> it = this.pending.iterator(); it.hasNext(); ) {
+      PendingBean pendingBean = it.next();
+
+      if (pendingBean.equals(userBean)) {
+        return pendingBean.isRequestSentFromCurrentUser();
+      }
+    }
+
+    return false;
+  }
   public HashSet<PendingBean> getPending() { return pending; }
   // settersHashSet
 

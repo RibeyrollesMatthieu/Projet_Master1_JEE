@@ -136,7 +136,6 @@ public class FriendsServlet extends HttpServlet {
 
       if (req.getSession().getAttribute("userSearch") != null) {
         req.getSession().setAttribute("userSearch", null);
-        System.out.println(req.getParameter("search"));
       }
       if (req.getParameter("search") != null) {
         this.searchUser(req);
