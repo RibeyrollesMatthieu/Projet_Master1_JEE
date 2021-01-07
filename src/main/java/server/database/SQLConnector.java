@@ -27,7 +27,6 @@ public class SQLConnector extends DbConnector {
 
   @Override
   public ResultSet getAllColumnsFor(String table) throws SQLException {
-    //FIXME returns nothin. Works using (datatbase()) but returns all the tables columns
     return SQLConnector.getInstance().doRequest(String.format(
       "SELECT column_name FROM information_schema.columns " +
         "WHERE table_schema = database() AND table_name = '%s'", table)

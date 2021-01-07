@@ -58,7 +58,7 @@
       </td>
 
       <td class="px-6 py-4 whitespace-nowrap text-right">
-        <a href="#" class="text-red-600 hover:text-red-800 noselect">
+        <a class="cursor-pointer text-red-600 hover:text-red-800 noselect" onclick="declineFriendRequest(${id})">
           <span class="hidden sm:block"> Decline </span>
           <span class="block sm:hidden"> <i class="fas fa fa-lg fa-times"></i> </span>
         </a>

@@ -110,6 +110,7 @@
     async function postAcceptRequest(id) { $.post('relation-update?accept=' + id); }
     async function postDelete(id) { $.post('relation-update?delete=' + id); }
     async function postCancelRequest(id) { $.post('relation-update?cancel=' + id); }
+    async function postDeclineRequest(id) { $.post('relation-update?decline=' + id); }
 
     const acceptFriendRequest = (id) => {
       postAcceptRequest(id)
@@ -127,6 +128,12 @@
       postCancelRequest(id)
         .then(reload)
         .catch(() => console.log("Cannot post the cancel friend request."));
+    }
+
+    const declineFriendRequest = (id) => {
+        postDeclineRequest(id)
+            .then(reload)
+            .catch(() => console.log("Cannot post the decline friend request"));
     }
 
     changeBackgrounds(true);

@@ -35,8 +35,13 @@ public class RelationServlet extends HttpServlet {
     }
   }
 
-  private void declineRequest() {
-
+  private void declineRequest(int id1, int id2) {
+    try {
+      SQLConnector.getInstance().doRequest(String.format("DELETE FROM friendship WHERE _from = %d AND _to = %d AND status = 'P'", id2, id1), true);
+    } catch (SQLException sqlException) {
+      sqlException.printStackTrace();
+//      System.err.println("An error has occured while trying to cancel the friend request you sent.");
+    }
   }
 
   private void cancelRequest(int id1, int id2) {
@@ -87,6 +92,10 @@ public class RelationServlet extends HttpServlet {
 
     if (req.getParameter("cancel") != null) {
       this.cancelRequest(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("cancel")));
+    }
+
+    if (req.getParameter("decline") != null) {
+      this.declineRequest(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("decline")));
     }
 
     resp.sendRedirect(req.getContextPath() + "/friends");
