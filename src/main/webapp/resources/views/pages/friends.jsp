@@ -29,32 +29,47 @@
 
               <table class="min-w-full divide-y divide-gray-200">
                 <div class="text-gray-900 bg-gray-200 flex flex-wrap justify-between text-center">
+                  <div id="search-display" class="hidden flex-1 p-2"> Search result </div>
                   <div id="friends-display" class="people-display flex-1 p-2 hover:bg-gray-300 cursor-pointer"> Friends </div>
                   <div id="pending-display" class="people-display flex-1 p-2 hover:bg-gray-300 cursor-pointer"> Pending </div>
                 </div>
-                <tbody id="friends-changing-content" class="bg-white divide-y divide-gray-200">
+                <tbody id="friends-changing-content"  class="bg-white divide-y divide-gray-200">
                   <c:choose>
-                    <c:when test="${param.get('cat') == 'pending'}">
-                      <c:forEach items="${sessionScope.user.getPending()}" var="pendingBean">
+                    <c:when test="${sessionScope.userSearch != null}">
+                      <c:forEach items="${sessionScope.userSearch.getSearchResultList()}" var="userSearchResult">
                         <t:friendCard
-                          firstname="${pendingBean.getFirstname()}"
-                          lastname="${pendingBean.getLastname()}"
-                          covided="${pendingBean.isCovided()}"
-                          id="${pendingBean.getId()}"
+                          firstname="${userSearchResult.getFirstname()}"
+                          lastname="${userSearchResult.getLastname()}"
+                          id="${userSearchResult.getId()}"
                           isFriend="false"
-                          requestFromMe='${pendingBean.isRequestSentFromCurrentUser()}'/>
+                          searchResult="true" />
                       </c:forEach>
                     </c:when>
 
                     <c:otherwise>
-                      <c:forEach items="${sessionScope.user.getFriends()}" var="friendBean">
-                        <t:friendCard
-                          firstname="${friendBean.getFirstname()}"
-                          lastname="${friendBean.getLastname()}"
-                          covided="${friendBean.isCovided()}"
-                          id="${friendBean.getId()}"
-                          isFriend="true" />
-                      </c:forEach>
+                      <c:choose>
+                        <c:when test="${param.get('cat') == 'pending'}">
+                          <c:forEach items="${sessionScope.user.getPending()}" var="pendingBean">
+                            <t:friendCard
+                              firstname="${pendingBean.getFirstname()}"
+                              lastname="${pendingBean.getLastname()}"
+                              covided="${pendingBean.isCovided()}"
+                              id="${pendingBean.getId()}"
+                              isFriend="false"
+                              requestFromMe='${pendingBean.isRequestSentFromCurrentUser()}'/>
+                          </c:forEach>
+                        </c:when>
+
+                        <c:otherwise>
+                          <c:forEach items="${sessionScope.user.getFriends()}" var="friendBean">
+                            <t:friendCard
+                              firstname="${friendBean.getFirstname()}"
+                              lastname="${friendBean.getLastname()}"
+                              id="${friendBean.getId()}"
+                              isFriend="true" />
+                          </c:forEach>
+                        </c:otherwise>
+                      </c:choose>
                     </c:otherwise>
                   </c:choose>
                 </tbody>
@@ -72,6 +87,7 @@
     const bg = "bg-gray-300";
     const pending = document.getElementById("pending-display");
     const friends = document.getElementById("friends-display");
+    const searchDisplay = document.getElementById("search-display");
     const parent = document.getElementById("friends-changing-content");
 
     const changeStatus = (target, toActivate) => {
@@ -79,11 +95,9 @@
       else target.classList.remove('active', bg);
     }
 
-    const reload = () => {
-      $("#friends-changing-content").load(window.location.href + " #friends-changing-content");
-    }
+    const reload = () => $("#friends-changing-content").load(window.location.href + " #friends-changing-content");
 
-    const changeBackgrounds = (isFriends) => {
+    const changeTab = (isFriends) => {
       const active = (isFriends ? friends : pending).classList.contains('active');
       if (isFriends) {
           if (active) {
@@ -104,7 +118,6 @@
             changeStatus(friends, false);
           }
       }
-
     }
 
     async function postAcceptRequest(id) { $.post('relation-update?accept=' + id); }
@@ -136,10 +149,28 @@
             .catch(() => console.log("Cannot post the decline friend request"));
     }
 
-    changeBackgrounds(true);
+    const searchUser = (user) => {
+        if (user.trim().length === 0) {
+          searchDisplay.classList.add('hidden');
+          friends.classList.remove('hidden');
+          pending.classList.remove('hidden');
+        } else {
+            if (searchDisplay.classList.contains('hidden')) searchDisplay.classList.remove('hidden');
+            if (! friends.classList.contains('hidden')) {
+                friends.classList.add('hidden');
+                pending.classList.add('hidden');
+            }
+            $.get('friends?search=' + user);
+        }
+        reload();
 
-    document.onload = () => changeBackgrounds(true);
-    pending.onclick = () => changeBackgrounds(false);
-    friends.onclick = () => changeBackgrounds(true);
+    }
+
+    changeTab(true);
+
+    pending.onclick = () => changeTab(false);
+    friends.onclick = () => changeTab(true);
+    document.onload = () => changeTab(true);
+
   </script>
 </html>

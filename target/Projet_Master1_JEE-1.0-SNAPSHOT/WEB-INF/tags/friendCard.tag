@@ -1,10 +1,11 @@
 <%@tag description="Base template for all the app pages" pageEncoding="UTF-8" %>
 <%@attribute name="firstname" required="true" %>
 <%@attribute name="lastname" required="true" %>
-<%@attribute name="covided" required="true" %>
+<%@attribute name="covided" required="false" %>
 <%@attribute name="isFriend" required="true" %>
 <%@attribute name="id" required="true" %>
 <%@attribute name="requestFromMe" required="false" %>
+<%@attribute name="searchResult" required="false" %>
 
 <html>
   <tr class="hover:bg-gray-300 <%--cursor-pointer--%>">
@@ -41,6 +42,29 @@
           <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user-times"></i> </span>
         </a>
       </td>
+
+    <% } else if (requestFromMe == null) { %>
+      <% if (searchResult.equals("true")) { %>
+        <td class="px-6 py-4 whitespace-nowrap text-right"></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-right">
+          <a href="#" class="text-blue-600 hover:text-blue-800 noselect">
+            <span class="hidden sm:block"> See profile </span>
+            <span class="block sm:hidden"> <i class="fas fa fa-lg fa-user"></i> </span>
+          </a>
+        </td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-right">
+          <a class="cursor-pointer text-green-600 hover:text-green-800 noselect" onclick="acceptFriendRequest(${id})">
+            <span class="hidden sm:block"> Send request </span>
+            <span class="block sm:hidden"> <i class="fas fa fa-lg fa-check"></i> </span>
+          </a>
+        </td>
+
+
+      <% } else { %>
+        <td class="px-6 py-4 whitespace-nowrap text-right"></td>
+      <% } %>
 
     <% } else if (requestFromMe.equals("false")) { %>
       <td class="px-6 py-4 whitespace-nowrap text-right">

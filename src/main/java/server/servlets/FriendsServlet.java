@@ -1,5 +1,6 @@
 package server.servlets;
 
+import server.database.FriendsSearchBean;
 import server.database.PendingBean;
 import server.database.SQLConnector;
 import server.database.UserBean;
@@ -24,8 +25,106 @@ public class FriendsServlet extends HttpServlet {
   // getters
   // setters
   // private
-  // public
 
+  //TODO: split this in many methods
+  private void getFriendsAndPendings(HttpServletRequest req) {
+    ResultSet setOfFriends = SQLConnector.getInstance().getFriendsOf(Integer.parseInt(req.getSession().getAttribute("id").toString()));
+    ResultSet setOfPendingsISent = SQLConnector.getInstance().getPendingInvitesISent(Integer.parseInt(req.getSession().getAttribute("id").toString()));
+    ResultSet setOfPendingsIReceived = SQLConnector.getInstance().getPendingsWeSentMe(Integer.parseInt(req.getSession().getAttribute("id").toString()));
+
+    try {
+      UserBean user = (UserBean) req.getSession().getAttribute("user");
+
+      user.getFriends().clear();
+      user.getPending().clear();
+
+      //TODO: change this method to when we detect a changment or nah
+      while(setOfFriends.next()) {
+        UserBean friend = new UserBean();
+        ResultSet friendSet = SQLConnector.getInstance().getUser(setOfFriends.getInt(1));
+        friendSet.next();
+
+        friend.setId(friendSet.getInt("id"));
+        friend.setFirstname(friendSet.getString("firstname"));
+        friend.setLastname(friendSet.getString("lastname"));
+        friend.setCovided(friendSet.getBoolean("covided"));
+        friend.setEmail(friendSet.getString("email"));
+
+        user.addFriend(friend);
+      }
+
+      while (setOfPendingsISent.next()) {
+        PendingBean pending = new PendingBean();
+        ResultSet pendingSet = SQLConnector.getInstance().getUser(setOfPendingsISent.getInt(1));
+        pendingSet.next();
+
+        pending.setId(pendingSet.getInt("id"));
+        pending.setFirstname(pendingSet.getString("firstname"));
+        pending.setLastname(pendingSet.getString("lastname"));
+        pending.setEmail(pendingSet.getString("email"));
+        pending.setRequestSentFromCurrentUser(true);
+
+        user.addPending(pending);
+      }
+
+      while (setOfPendingsIReceived.next()) {
+        PendingBean pending = new PendingBean();
+        ResultSet pendingSet = SQLConnector.getInstance().getUser(setOfPendingsIReceived.getInt(1));
+        pendingSet.next();
+
+        pending.setId(pendingSet.getInt("id"));
+        pending.setFirstname(pendingSet.getString("firstname"));
+        pending.setLastname(pendingSet.getString("lastname"));
+        pending.setEmail(pendingSet.getString("email"));
+        pending.setRequestSentFromCurrentUser(false);
+
+        user.addPending(pending);
+      }
+    } catch (SQLException sqlException) {
+//        sqlException.printStackTrace();
+    }
+  }
+
+  private ResultSet friendsSearchResult;
+
+  private void searchUser(HttpServletRequest req) {
+    String currentSearch = req.getParameter("search").trim().toLowerCase();
+
+    if (currentSearch.trim().length() == 0) {
+      req.getSession().setAttribute("userSearch", null);
+      return;
+    }
+
+    FriendsSearchBean friendsSearchBean = new FriendsSearchBean();
+
+    try {
+      if (friendsSearchResult != null) friendsSearchResult.close();
+
+      friendsSearchResult = SQLConnector.getInstance().doRequest(
+        "SELECT id, firstname, lastname, email FROM users WHERE " +
+        "id <> " + Integer.parseInt(req.getSession().getAttribute("id").toString()) +
+        " AND (firstname LIKE '%" + currentSearch + "%' " +
+        "OR lastname LIKE '%" + currentSearch + "%');", false);
+
+        while (friendsSearchResult.next()) {
+          UserBean user = new UserBean();
+
+          user.setEmail(friendsSearchResult.getString("email"));
+          user.setId(friendsSearchResult.getInt("id"));
+          user.setFirstname(friendsSearchResult.getString("firstname"));
+          user.setLastname(friendsSearchResult.getString("lastname"));
+
+          friendsSearchBean.addUser(user);
+        }
+
+      req.getSession().setAttribute("userSearch", friendsSearchBean);
+    } catch (SQLException sqlException) {
+      sqlException.printStackTrace();
+//      System.err.println("An error has occured when listing all database users");
+    }
+  }
+
+  // public
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,60 +134,14 @@ public class FriendsServlet extends HttpServlet {
 
       assert req.getSession().getAttribute("id") != null : "Cannot look at friends because id is null";
 
-      ResultSet setOfFriends = SQLConnector.getInstance().getFriendsOf(Integer.parseInt(req.getSession().getAttribute("id").toString()));
-      ResultSet setOfPendingsISent = SQLConnector.getInstance().getPendingInvitesISent(Integer.parseInt(req.getSession().getAttribute("id").toString()));
-      ResultSet setOfPendingsIReceived = SQLConnector.getInstance().getPendingsWeSentMe(Integer.parseInt(req.getSession().getAttribute("id").toString()));
-
-      try {
-        UserBean user = (UserBean) req.getSession().getAttribute("user");
-
-        user.getFriends().clear();
-        user.getPending().clear();
-
-        //TODO: change this method to when we detect a changment or nah
-        while(setOfFriends.next()) {
-          UserBean friend = new UserBean();
-          ResultSet friendSet = SQLConnector.getInstance().getUser(setOfFriends.getInt(1));
-          friendSet.next();
-
-          friend.setId(friendSet.getInt("id"));
-          friend.setFirstname(friendSet.getString("firstname"));
-          friend.setLastname(friendSet.getString("lastname"));
-          friend.setCovided(friendSet.getBoolean("covided"));
-          friend.setEmail(friendSet.getString("email"));
-
-          user.addFriend(friend);
-        }
-
-        while (setOfPendingsISent.next()) {
-          PendingBean pending = new PendingBean();
-          ResultSet pendingSet = SQLConnector.getInstance().getUser(setOfPendingsISent.getInt(1));
-          pendingSet.next();
-
-          pending.setId(pendingSet.getInt("id"));
-          pending.setFirstname(pendingSet.getString("firstname"));
-          pending.setLastname(pendingSet.getString("lastname"));
-          pending.setEmail(pendingSet.getString("email"));
-          pending.setRequestSentFromCurrentUser(true);
-
-          user.addPending(pending);
-        }
-
-        while (setOfPendingsIReceived.next()) {
-          PendingBean pending = new PendingBean();
-          ResultSet pendingSet = SQLConnector.getInstance().getUser(setOfPendingsIReceived.getInt(1));
-          pendingSet.next();
-
-          pending.setId(pendingSet.getInt("id"));
-          pending.setFirstname(pendingSet.getString("firstname"));
-          pending.setLastname(pendingSet.getString("lastname"));
-          pending.setEmail(pendingSet.getString("email"));
-          pending.setRequestSentFromCurrentUser(false);
-
-          user.addPending(pending);
-        }
-      } catch (SQLException sqlException) {
-//        sqlException.printStackTrace();
+      if (req.getSession().getAttribute("userSearch") != null) {
+        req.getSession().setAttribute("userSearch", null);
+        System.out.println(req.getParameter("search"));
+      }
+      if (req.getParameter("search") != null) {
+        this.searchUser(req);
+      } else {
+        this.getFriendsAndPendings(req);
       }
 
       req.getRequestDispatcher("resources/views/pages/friends.jsp").forward(req, resp);

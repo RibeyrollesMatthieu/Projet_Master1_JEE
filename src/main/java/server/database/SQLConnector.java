@@ -48,10 +48,8 @@ public class SQLConnector extends DbConnector {
 
   public ResultSet getPendingsWeSentMe(int id) {
     try {
-      ResultSet set = SQLConnector.getInstance().doRequest(String.format(
+      return SQLConnector.getInstance().doRequest(String.format(
         "SELECT _from FROM friendship WHERE _to = %d AND status = 'P';", id), false);
-
-      return set;
     } catch (SQLException sqlException) {
       sqlException.printStackTrace();
     }
@@ -109,10 +107,10 @@ public class SQLConnector extends DbConnector {
 //    }
 
     assert SQLConnector.getInstance().getConnection() != null : "Cannot execute he query cause connection is null.";
-    Statement statement = SQLConnector.getInstance().getConnection().createStatement();
+    PreparedStatement statement = SQLConnector.getInstance().getConnection().prepareStatement(query);
 
-    if (changingValues) statement.executeUpdate(query);
-    else resultSet = statement.executeQuery(query);
+    if (changingValues) statement.executeUpdate();
+    else resultSet = statement.executeQuery();
 
     return resultSet;
   }
