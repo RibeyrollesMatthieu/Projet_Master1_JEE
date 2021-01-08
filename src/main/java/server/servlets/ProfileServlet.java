@@ -1,6 +1,9 @@
 package server.servlets;
 
-import server.database.*;
+import server.database.EventBean;
+import server.database.Hashing;
+import server.database.SQLConnector;
+import server.database.UserBean;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,9 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @author Ribeyrolles Matthieu
@@ -111,18 +119,45 @@ public class ProfileServlet extends HttpServlet implements FormsMethods, Servlet
     }
   }
 
+  private void addEvent(HttpServletRequest req) throws ParseException, SQLException {
+    SQLConnector.getInstance().doRequest(String.format(
+      "INSERT INTO events(title, date, start, end, id_place, content, owner, image) " +
+      "VALUES('%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s');",
+      req.getParameter("title"),
+      req.getParameter("date-event"),
+      req.getParameter("start"),
+      req.getParameter("end"),
+      0,
+      req.getParameter("content"),
+      ((UserBean) req.getSession().getAttribute("user")).getId(),
+      String.format("https://picsum.photos/id/%d/200/300", new Random().nextInt(1084))
+    ), true);
+  }
+
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    if (this.isFormCorrectlyWritten(req)) {
-      try {
-        this.updateProfile(req, req.getParameterMap());
-        resp.sendRedirect(req.getRequestURI());
-      } catch (Exception e /*| SQLException sqlException*/) {
-        System.err.println("Unable to update account");
+
+    if (req.getParameter("add-event") != null) {
+      if (this.isFormCorrectlyWritten(req)) {
+        try {
+          this.addEvent(req);
+        } catch (ParseException | SQLException e) {
+          e.printStackTrace();
+        }
         resp.sendRedirect(req.getRequestURI());
       }
     } else {
-      resp.sendRedirect(req.getRequestURI());
+      if (this.isFormCorrectlyWritten(req)) {
+        try {
+          this.updateProfile(req, req.getParameterMap());
+          resp.sendRedirect(req.getRequestURI());
+        } catch (Exception e /*| SQLException sqlException*/) {
+          System.err.println("Unable to update account");
+          resp.sendRedirect(req.getRequestURI());
+        }
+      } else {
+        resp.sendRedirect(req.getRequestURI());
+      }
     }
   }
 

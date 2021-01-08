@@ -32,9 +32,11 @@ public interface FormsMethods {
       }
     }
 
-    if (! isEmailGood(req.getParameter("email"))) {
-      System.err.println("Email is not correct.");
-      return false;
+    if (req.getParameter("email") != null) {
+      if (! isEmailGood(req.getParameter("email"))) {
+        System.err.println("Email is not correct.");
+        return false;
+      }
     }
 
     return true;
