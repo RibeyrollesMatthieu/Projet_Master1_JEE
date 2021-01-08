@@ -48,6 +48,30 @@ public abstract class NotifcationsSender {
     insertNotif(title, content, from ,to, "");
   }
 
+  public static void sendDeclinedFriendRequestNotification(int from, int to) throws SQLException {
+    ResultSet fromNameSet = SQLConnector.getInstance().doRequest("SELECT firstname, lastname FROM users WHERE id = " + from, false);
+    fromNameSet.next();
+
+    String title = String.format("%s %s declined your friend request!", fromNameSet.getString("firstname"), fromNameSet.getString("lastname").toUpperCase());
+    String content = String.format(
+      "%s declined your friend request. You can still send another friend request if you want to.",
+      fromNameSet.getString("firstname")
+    );
+
+    insertNotif(title, content, to, from, "");
+
+    ResultSet toNameSet = SQLConnector.getInstance().doRequest("SELECT firstname, lastname FROM users WHERE id = " + to, false);
+    toNameSet.next();
+
+    title = "You declined the friend request.";
+    content = String.format(
+      "You declined the friend request from %s %s. Note that this person can still send you another one.",
+      toNameSet.getString("firstname"), toNameSet.getString("lastname")
+    );
+
+    insertNotif(title, content, from ,to, "");
+  }
+
   public static void sendFriendRequestNotification(int from, int to) throws SQLException {
     ResultSet fromNameSet = SQLConnector.getInstance().doRequest("SELECT firstname, lastname FROM users WHERE id = " + from, false);
     fromNameSet.next();

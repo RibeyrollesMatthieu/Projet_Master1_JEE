@@ -25,9 +25,13 @@
       </c:when>
 
       <c:when test="${status.equals('acceptableRequest')}">
-        <a id="accept-request-notif-button" onclick="acceptFriendRequestFromNotif(${ownerId}, ${concernedId}, ${id})" class="cursor-pointer inline-block bg-red-200 hover:bg-red-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ml-auto"> Accept </a>
-        <a id="decline-request-notif-button" onclick="cancelFriendRequestFromNotif(${ownerId}, ${concernedId}, ${id})" class="cursor-pointer inline-block bg-red-200 hover:bg-red-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ml-auto"> Decline </a>
+        <a id="accept-request-notif-button" onclick="acceptFriendRequestFromNotif(${ownerId}, ${concernedId}, ${id})" class="cursor-pointer inline-block bg-green-200 hover:bg-green-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ml-auto"> Accept </a>
+        <a id="decline-request-notif-button" onclick="declineFriendRequestFromNotif(${ownerId}, ${concernedId}, ${id})" class="cursor-pointer inline-block bg-red-200 hover:bg-red-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ml-auto"> Decline </a>
       </c:when>
+
+      <c:otherwise>
+        <a onclick="eraseNotif(${id})" class="cursor-pointer inline-block bg-yellow-200 hover:bg-yellow-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ml-auto"> Got it </a>
+      </c:otherwise>
     </c:choose>
   </div>
 </div>

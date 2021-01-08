@@ -55,8 +55,18 @@ public class RelationServlet extends HttpServlet {
     }
   }
 
-  private void acceptFriendRequest(HttpServletRequest req, int id1, int id2) {
-    if (! ((UserBean) req.getSession().getAttribute("user")).isPendingId(id2)) return;
+  private void acceptFriendRequest(HttpServletRequest req, int id1, int id2) throws SQLException {
+
+    ResultSet isPendingSet = SQLConnector.getInstance().doRequest(String.format(
+      "SELECT * FROM friendship WHERE " +
+      "status = 'P' AND " +
+      "(_from = '%d' AND _to = '%d' " +
+      "OR _to = '%d' AND _from = '%d');", id1, id2, id1, id2
+    ), false);
+
+    while(isPendingSet.next()) {
+      System.out.println("coucou les gens je suis en pending");
+    }
 
     try {
       SQLConnector.getInstance().doRequest(String.format(
@@ -96,8 +106,9 @@ public class RelationServlet extends HttpServlet {
     }
 
     if (req.getParameter("accept") != null) {
-      this.acceptFriendRequest(req, Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("accept")));
       try {
+
+        this.acceptFriendRequest(req, Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("accept")));
         NotifcationsSender.sendAcceptedFriendRequestNotification(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("accept")));
       } catch (SQLException sqlException) {
         sqlException.printStackTrace();
@@ -105,12 +116,16 @@ public class RelationServlet extends HttpServlet {
     }
 
     if (req.getParameter("cancel") != null) {
-      System.out.println("coucpu");
       this.cancelRequest(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("cancel")));
     }
 
     if (req.getParameter("decline") != null) {
       this.declineRequest(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("decline")));
+      try {
+        NotifcationsSender.sendDeclinedFriendRequestNotification(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("decline")));
+      } catch (SQLException sqlException) {
+        sqlException.printStackTrace();
+      }
     }
 
     resp.sendRedirect(req.getContextPath() + "/friends");
