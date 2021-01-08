@@ -32,6 +32,7 @@ public class NotificationsServlet extends HttpServlet implements ServletMethods 
       System.err.println("An error has occurred while trying to erase a notification.");
     }
   }
+
   // public
 
   @Override

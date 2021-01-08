@@ -37,36 +37,6 @@ public class RelationServlet extends HttpServlet {
     }
   }
 
-  private void sendFriendRequestNotification(int from, int to) throws SQLException {
-    ResultSet fromNameSet = SQLConnector.getInstance().doRequest("SELECT firstname, lastname FROM users WHERE id = " + from, false);
-    fromNameSet.next();
-
-    String title = String.format("%s %s sent you a friend request!", fromNameSet.getString("firstname"), fromNameSet.getString("lastname").toUpperCase());
-    String content = String.format(
-      "%s sent you a friend request. You now have to decide if you re gonna accept it or decline it. It s up to you!",
-      fromNameSet.getString("firstname")
-    );
-
-    SQLConnector.getInstance().doRequest(String.format(
-      "INSERT INTO notifications(title, content, concernedUser, owner, status) " +
-      "VALUES('%s', '%s', '%d', '%d', 'acceptableRequest')", title, content, to, from
-    ), true);
-
-    ResultSet toNameSet = SQLConnector.getInstance().doRequest("SELECT firstname, lastname FROM users WHERE id = " + to, false);
-    toNameSet.next();
-
-    title = "A friend request has been sent.";
-    content = String.format(
-      "You sent a friend request to %s %s. You can still cancel it, or just wait for an answer :)",
-      toNameSet.getString("firstname"), toNameSet.getString("lastname")
-    );
-
-    SQLConnector.getInstance().doRequest(String.format(
-      "INSERT INTO notifications(title, content, concernedUser, owner, status) " +
-        "VALUES('%s', '%s', '%d', '%d', 'sentRequest')", title, content, from, to
-    ), true);
-  }
-
   private void declineRequest(int id1, int id2) {
     try {
       SQLConnector.getInstance().doRequest(String.format("DELETE FROM friendship WHERE _from = %d AND _to = %d AND status = 'P'", id2, id1), true);
@@ -115,7 +85,7 @@ public class RelationServlet extends HttpServlet {
     if (req.getParameter("add") != null) {
       this.sendFriendRequest(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("add")));
       try {
-        this.sendFriendRequestNotification(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("add")));
+        NotifcationsSender.sendFriendRequestNotification(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("add")));
       } catch (SQLException sqlException) {
         sqlException.printStackTrace();
       }
@@ -127,6 +97,11 @@ public class RelationServlet extends HttpServlet {
 
     if (req.getParameter("accept") != null) {
       this.acceptFriendRequest(req, Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("accept")));
+      try {
+        NotifcationsSender.sendAcceptedFriendRequestNotification(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("accept")));
+      } catch (SQLException sqlException) {
+        sqlException.printStackTrace();
+      }
     }
 
     if (req.getParameter("cancel") != null) {

@@ -29,9 +29,5 @@
         <a id="decline-request-notif-button" onclick="cancelFriendRequestFromNotif(${ownerId}, ${concernedId}, ${id})" class="cursor-pointer inline-block bg-red-200 hover:bg-red-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ml-auto"> Decline </a>
       </c:when>
     </c:choose>
-
-    <a id="cancel-request-notif-button" class="cursor-pointer inline-block bg-red-200 hover:bg-red-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ml-auto"> ${ownerId} </a>
-    <a id="cancel-request-notif-button" class="cursor-pointer inline-block bg-red-200 hover:bg-red-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ml-auto"> ${concernedId} </a>
-
   </div>
 </div>

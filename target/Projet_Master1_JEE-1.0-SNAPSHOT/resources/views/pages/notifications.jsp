@@ -53,14 +53,16 @@
 
     const cancelFriendRequestFromNotif = (idOwner, idConcerned, idNotif) => {
       postCancelRequest(idOwner)
-        .then(() => eraseNotif(idNotif))
+        // .then(() => eraseNotif(idNotif))
         .catch( () =>  console.log("Cannot post the cancel friend request."));
+      eraseNotif(idNotif);
     }
 
     const acceptFriendRequestFromNotif = (idOwner, idConcerned, idNotif) => {
       postAcceptRequest(idOwner)
-        .then(() => eraseNotif(idNotif))
+        // .then(() => eraseNotif(idNotif))
         .catch( () =>  console.log("Cannot post the cancel friend request."));
+      eraseNotif(idNotif);
     }
   </script>
 </html>
