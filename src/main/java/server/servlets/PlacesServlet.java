@@ -1,20 +1,16 @@
 package server.servlets;
 
-import server.database.SQLConnector;
-import server.database.UserBean;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * @author Ribeyrolles Matthieu
- * 05/01/2021, 21:53
+ * 08/01/2021, 19:56
  */
-public class CovidedServlet extends HttpServlet {
+public class PlacesServlet extends HttpServlet {
   /*------------------------------------------------------------------
                               Methods
    ------------------------------------------------------------------*/
@@ -26,30 +22,12 @@ public class CovidedServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    resp.sendRedirect(req.getRequestURI());
+    resp.sendRedirect(req.getContextPath());
   }
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    assert req.getSession().getAttribute("id") != null: "Cannot go further, id is null";
 
-    UserBean user = (UserBean) req.getSession().getAttribute("user");
-    System.out.println(user.isCovided());
-
-    if (! user.isCovided()) {
-      try {
-        SQLConnector.getInstance().doRequest(String.format(
-          "UPDATE users SET covided = true WHERE id = %d",
-          Integer.parseInt(req.getSession().getAttribute("id").toString())),
-          true);
-
-        user.setCovided(true);
-
-        NotifcationsSender.sendCovidedMessage((UserBean) req.getSession().getAttribute("user"));
-      } catch (SQLException sqlException) {
-        sqlException.printStackTrace();
-      }
-    }
   }
 
   /*------------------------------------------------------------------

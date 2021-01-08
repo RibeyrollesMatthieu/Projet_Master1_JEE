@@ -1,9 +1,6 @@
 package server.servlets;
 
-import server.database.EventBean;
-import server.database.Hashing;
-import server.database.SQLConnector;
-import server.database.UserBean;
+import server.database.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,16 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.http.HttpRequest;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author Ribeyrolles Matthieu
@@ -61,15 +56,33 @@ public class ProfileServlet extends HttpServlet implements FormsMethods, Servlet
   }
   // public
 
+  private void loadPlaces(HttpServletRequest req) throws SQLException {
+    ResultSet set = SQLConnector.getInstance().doRequest("SELECT * from places", false);
+    HashSet<PlaceBean> places = new HashSet<>();
+
+    while(set.next()) {
+      PlaceBean placeBean = new PlaceBean();
+
+      placeBean.setId(set.getInt("id"));
+      placeBean.setName(set.getString("name"));
+      placeBean.setAddress(set.getString("address"));
+
+      places.add(placeBean);
+    }
+
+    req.getSession().setAttribute("places", places);
+    System.out.println(places);
+  }
+
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     final Object loggedAttribute = req.getSession().getAttribute("logged");
-
 
     if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) {
       try {
         this.loadNotifications((UserBean) req.getSession().getAttribute("user"));
         this.loadEventsFor((UserBean) req.getSession().getAttribute("user"), ((UserBean) req.getSession().getAttribute("user")).getId());
+        this.loadPlaces(req);
       } catch (SQLException sqlException) {
         sqlException.printStackTrace();
       }

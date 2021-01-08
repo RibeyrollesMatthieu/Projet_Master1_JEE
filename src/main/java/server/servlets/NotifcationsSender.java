@@ -25,6 +25,14 @@ public abstract class NotifcationsSender {
     ), true);
   }
 
+  public static void sendCovidedMessage(UserBean currentUser) throws SQLException {
+    for (UserBean userBean : currentUser.getFriends()) {
+      sendCovidedMessage(true, userBean.getId());
+    }
+
+
+  }
+
   private static void sendCovidedMessage(boolean isFromFriend, int id) throws SQLException {
     String title;
     String content;
@@ -63,12 +71,6 @@ public abstract class NotifcationsSender {
     );
 
     insertNotif(title, content, from ,to, "");
-  }
-
-  public static void sendCovidedMessageToFriends(UserBean currentUser) throws SQLException {
-      for (UserBean userBean : currentUser.getFriends()) {
-        sendCovidedMessage(true, userBean.getId());
-      }
   }
 
   public static void sendAcceptedFriendRequestNotification(int from, int to) throws SQLException {
