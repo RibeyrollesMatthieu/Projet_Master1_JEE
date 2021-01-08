@@ -17,9 +17,6 @@ public interface ServletMethods {
     ResultSet set = SQLConnector.getInstance().doRequest(String.format(
       "SELECT * from notifications WHERE concernedUser = %d;", currentUSer.getId()), false);
 
-    System.out.println(currentUSer);
-    System.out.println(currentUSer.getId());
-
     while(set.next()) {
       NotificationBean notificationBean = new NotificationBean();
 

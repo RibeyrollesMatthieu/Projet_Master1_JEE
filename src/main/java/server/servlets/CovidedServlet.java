@@ -34,8 +34,9 @@ public class CovidedServlet extends HttpServlet {
     assert req.getSession().getAttribute("id") != null: "Cannot go further, id is null";
 
     UserBean user = (UserBean) req.getSession().getAttribute("user");
+    System.out.println(user.isCovided());
+
     if (! user.isCovided()) {
-      System.out.println("coucoouuuu");
       try {
         SQLConnector.getInstance().doRequest(String.format(
           "UPDATE users SET covided = true WHERE id = %d",
@@ -43,6 +44,8 @@ public class CovidedServlet extends HttpServlet {
           true);
 
         user.setCovided(true);
+
+        NotifcationsSender.sendCovidedMessageToFriends((UserBean) req.getSession().getAttribute("user"));
       } catch (SQLException sqlException) {
         sqlException.printStackTrace();
       }

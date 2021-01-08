@@ -1,6 +1,7 @@
 package server.servlets;
 
 import server.database.SQLConnector;
+import server.database.UserBean;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +24,29 @@ public abstract class NotifcationsSender {
         "VALUES('%s', '%s', '%d', '%d', '%s')", title, content, from, to, status
     ), true);
   }
+
+  private static void sendCovidedMessage(boolean isFromFriend, int id) throws SQLException {
+    String title;
+    String content;
+
+    if (isFromFriend) {
+      title = "A friend is covided!";
+      content = "A friend of yours has declared being covided. We please you to stay at home and tell everyone you have been in contact these past days to take care.";
+    } else {
+      title = "Someone is covided!";
+      content = "Someone you may have been in contact with has declared being covided. We please you to stay at home and tell everyone you have been in contact these past days to take care.";
+    }
+
+    insertNotif(title, content, id, 1, "covidedAlert");
+  }
+
   // public
+  public static void sendCovidedMessageToFriends(UserBean currentUser) throws SQLException {
+      for (UserBean userBean : currentUser.getFriends()) {
+        sendCovidedMessage(true, userBean.getId());
+      }
+  }
+
   public static void sendAcceptedFriendRequestNotification(int from, int to) throws SQLException {
     ResultSet fromNameSet = SQLConnector.getInstance().doRequest("SELECT firstname, lastname FROM users WHERE id = " + from, false);
     fromNameSet.next();

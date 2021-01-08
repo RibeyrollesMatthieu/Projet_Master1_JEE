@@ -22,16 +22,13 @@
       <a href="${pageContext.request.contextPath}/notifications" class="text-xl text-bold hover:text-yellow-700 relative">
         <i class="fa fa-lg far fa-comment"></i>
 
+        <%-- TODO: can be replaced by a if --%>
         <c:choose>
-          <c:when test="${sessionScope.user.getNotificationsBean().size() == 0}">
-
+          <c:when test="${sessionScope.user.getNotificationsBean().size() != 0}">
+            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                ${sessionScope.user.getNotificationsBean().size()}
+            </span>
           </c:when>
-
-          <c:otherwise>
-          <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-              ${sessionScope.user.getNotificationsBean().size()}
-          </span>
-          </c:otherwise>
         </c:choose>
       </a>
 

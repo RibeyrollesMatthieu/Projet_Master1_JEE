@@ -64,6 +64,8 @@ public class RelationServlet extends HttpServlet {
       "OR _to = '%d' AND _from = '%d');", id1, id2, id1, id2
     ), false);
 
+    //FIXME! A supprimer si je décide de supprimer les 2 notifications
+    // sinon, mettre l'autre code dedans un if (isPenindSet.next())
     while(isPendingSet.next()) {
       System.out.println("coucou les gens je suis en pending");
     }

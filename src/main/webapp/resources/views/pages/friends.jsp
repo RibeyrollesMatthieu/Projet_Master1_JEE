@@ -90,6 +90,7 @@
                               firstname="${friendBean.getFirstname()}"
                               lastname="${friendBean.getLastname()}"
                               id="${friendBean.getId()}"
+                              covided="${friendBean.isCovided()}"
                               isFriend="true" />
                           </c:forEach>
                         </c:otherwise>
