@@ -107,14 +107,16 @@ public class FriendsServlet extends HttpServlet implements ServletMethods {
         "OR lastname LIKE '%" + currentSearch + "%');", false);
 
         while (friendsSearchResult.next()) {
-          UserBean user = new UserBean();
+          if (friendsSearchResult.getInt("id") > 1) {
+            UserBean user = new UserBean();
 
-          user.setEmail(friendsSearchResult.getString("email"));
-          user.setId(friendsSearchResult.getInt("id"));
-          user.setFirstname(friendsSearchResult.getString("firstname"));
-          user.setLastname(friendsSearchResult.getString("lastname"));
+            user.setEmail(friendsSearchResult.getString("email"));
+            user.setId(friendsSearchResult.getInt("id"));
+            user.setFirstname(friendsSearchResult.getString("firstname"));
+            user.setLastname(friendsSearchResult.getString("lastname"));
 
-          friendsSearchBean.addUser(user);
+            friendsSearchBean.addUser(user);
+          }
         }
 
       req.getSession().setAttribute("userSearch", friendsSearchBean);

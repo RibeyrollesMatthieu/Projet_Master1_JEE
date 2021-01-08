@@ -46,7 +46,7 @@
     </nav>
   </header>
 
-  <t:covided_alert />
+  <t:covided_alert iscovided="${sessionScope.user.isCovided()}"/>
 
 
   <script>

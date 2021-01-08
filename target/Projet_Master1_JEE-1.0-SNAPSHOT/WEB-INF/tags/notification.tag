@@ -9,7 +9,7 @@
 <%@attribute name="concernedId" required="true" %>
 
 
-<div class="max-w-sm rounded overflow-hidden shadow-lg shadow-white bg-gray-300 m-4">
+<div class="max-w-sm rounded overflow-hidden shadow-lg shadow-white m-4 ${status.equals("covided") ? 'bg-red-300' : 'bg-gray-300'}">
   <div class="px-6 py-4">
     <div class="relative font-bold text-xl mb-2 text-gray-900">
       ${title}

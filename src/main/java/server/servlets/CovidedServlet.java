@@ -44,7 +44,6 @@ public class CovidedServlet extends HttpServlet {
           true);
 
         user.setCovided(true);
-
         NotifcationsSender.sendCovidedMessageToFriends((UserBean) req.getSession().getAttribute("user"));
       } catch (SQLException sqlException) {
         sqlException.printStackTrace();
