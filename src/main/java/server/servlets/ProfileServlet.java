@@ -71,7 +71,6 @@ public class ProfileServlet extends HttpServlet implements FormsMethods, Servlet
     }
 
     req.getSession().setAttribute("places", places);
-    System.out.println(places);
   }
 
   @Override
@@ -143,25 +142,25 @@ public class ProfileServlet extends HttpServlet implements FormsMethods, Servlet
       req.getParameter("date-event"),
       req.getParameter("start"),
       req.getParameter("end"),
-      0,
+      Integer.parseInt(req.getParameter("place")),
       req.getParameter("content"),
       ((UserBean) req.getSession().getAttribute("user")).getId(),
       String.format("https://picsum.photos/id/%d/200/300", new Random().nextInt(1084))
     ), true);
   }
 
+
+
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
     if (req.getParameter("add-event") != null) {
-      if (this.isFormCorrectlyWritten(req)) {
-        try {
-          this.addEvent(req);
-        } catch (ParseException | SQLException e) {
-          e.printStackTrace();
-        }
-        resp.sendRedirect(req.getRequestURI());
+      try {
+        this.addEvent(req);
+      } catch (ParseException | SQLException e) {
+        e.printStackTrace();
       }
+      resp.sendRedirect(req.getRequestURI());
     } else {
       try {
         this.updateProfile(req, req.getParameterMap());

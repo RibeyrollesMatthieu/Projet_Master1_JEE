@@ -5,7 +5,6 @@
 <%@attribute name="date" required="true" %>
 <%@attribute name="user" required="false" %>
 
-<html>
   <div class="max-w-sm w-full m-auto lg:max-w-full lg:flex justify-center">
     <div class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" style="background-image: url('${imageSrc}')">
     </div>
@@ -15,7 +14,7 @@
         <p class="text-gray-700 text-base"> ${content} </p>
       </div>
       <div class="flex items-center">
-        <img class="w-10 h-10 rounded-full mr-4" src="${user.getProfilePic()}" alt="Avatar of Jonathan Reinink">
+        <img class="w-10 h-10 rounded-full mr-4" src="${user.getProfilePic()}" alt="">
         <div class="text-sm">
           <p class="text-gray-900 leading-none"> ${user.getFirstname()} ${user.getLastname()}</p>
           <p class="text-gray-600">${date}</p>
@@ -23,4 +22,3 @@
       </div>
     </div>
   </div>
-</html>

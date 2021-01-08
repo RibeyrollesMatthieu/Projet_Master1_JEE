@@ -83,6 +83,17 @@
 
 
   <servlet>
+    <servlet-name>servlets.PlacesServlet</servlet-name>
+    <servlet-class>server.servlets.PlacesServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>servlets.PlacesServlet</servlet-name>
+    <url-pattern>/places</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
     <servlet-name>servlets.CovidedServlet</servlet-name>
     <servlet-class>server.servlets.CovidedServlet</servlet-class>
   </servlet>

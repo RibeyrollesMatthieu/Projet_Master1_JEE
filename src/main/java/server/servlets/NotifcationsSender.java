@@ -29,9 +29,14 @@ public abstract class NotifcationsSender {
     for (UserBean userBean : currentUser.getFriends()) {
       sendCovidedMessage(true, userBean.getId());
     }
-
-
   }
+
+  public static void sendCovidedMessageToRandoms(ResultSet set) throws SQLException {
+    while(set.next()) {
+      sendCovidedMessage(false, set.getInt("owner"));
+    }
+  }
+
 
   private static void sendCovidedMessage(boolean isFromFriend, int id) throws SQLException {
     String title;

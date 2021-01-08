@@ -50,6 +50,11 @@ public class PlaceBean {
   }
 
   @Override
+  public String toString() {
+    return String.format("%s   ~~   %s", this.name.replace(',', ' '), this.address.replace(',', ' '));
+  }
+
+  @Override
   public int hashCode() {
     return Objects.hash(id);
   }

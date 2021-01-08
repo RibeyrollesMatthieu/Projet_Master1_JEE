@@ -70,12 +70,52 @@
             <t:timePicker id="end" label="Event end&nbsp;&nbsp;"/>
           </div>
           <div class="mb-4">
-            <t:dropdown id="place" text="Place of the event"/>
+            <div class="relative inline-flex">
+              <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232"><path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"/></svg>
+              <select id="place" name="place" class="
+                rounded-full text-gray-900 h-10 pl-5 pr-10 bg-white hover:border-gray-400
+                focus:outline-none
+                focus:ring-2
+                focus:ring-yellow-600
+                focus:border-transparent
+                rounded
+                p-2
+                appearance-none
+                shadow">
+                <option value="-1">Place of the event</option>
+                <c:forEach items="${sessionScope.places}" var="place">
+                  <option value="${place.getId()}">${place.getName()}</option>
+                </c:forEach>
+
+                <option value="-2">New place</option>
+              </select>
+
+              <input type="hidden" id="placeId" name="placeId">
+
+            </div>
           </div>
 
-          <button id="submit-new-event" class="bg-yellow-600 font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed text-white" type="submit">
-            Save modifications
-          </button>
+
+          <div class="mb-4">
+            <button id="submit-new-event" class="bg-yellow-600 font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed text-white" type="submit">
+              Add event
+            </button>
+          </div>
+
+        </form>
+
+        <form action="places" method="post">
+          <div id="new-place-form" class="text-gray-900 mb-4 bg-blue-300 p-5 hidden">
+            <div class="mb-4">
+              <t:input id="new-place-name" type="text" placeholder="New place's name"/>
+            </div>
+            <div class="mb-4">
+              <t:input id="new-place-address" type="text" placeholder="New place's address"/>
+            </div>
+            <button id="new-place-submit" class="bg-yellow-600 font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed text-white">
+              Create new place
+            </button>
+          </div>
         </form>
 
         <div class="flex flex-wrap justify-center align-center mt-9 space-y-3">
@@ -100,6 +140,22 @@
           const addEventForm = document.getElementById("add-event-form");
           const fakeDateEvent = document.getElementById("date-event");
           const eventInputs = addEventForm.getElementsByTagName('input');
+          const newPlace = document.getElementById("new-place-form");
+
+          document.getElementById("new-place-submit").onclick = (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById("new-place-name").value;
+            const address = document.getElementById("new-place-address").value;
+
+            $.post('places?name=' + name + '&address=' + address);
+            window.location = window.location;
+            //
+            // console.log('coucou');
+
+            document.getElementById("new-place-form").classList.toggle("hidden");
+          }
+
           const changeToDate = (input) => input.type = 'date';
 
           fakeDate.onclick = () => changeToDate(fakeDate);
@@ -135,22 +191,46 @@
             button.classList.remove('cursor-not-allowed', 'opacity-50');
           }
 
-          //TODO duplicate code with login
-          //FIXME button not changing back color when we erase a text
+          // //FIXME button not changing back color when we erase a text
           const checkIfEventFormIsValid = () => {
-            for (const input of eventInputs) {
-              if (input.value === '' || document.getElementById("place").value === "Place of the event") return;
+            toggleNewPLace();
+
+            // for (const input of eventInputs) {
+            //   console.log(input);
+              if (document.getElementById("place").value === "-1" || document.getElementById("place").value === "-2") {
+                eventSubmit.classList.add('cursor-not-allowed', 'opacity-50');
+                return;
+              }
               else if (! eventSubmit.classList.contains("cursor-not-allowed")) {
                 eventSubmit.classList.add('cursor-not-allowed', 'opacity-50');
               }
-            }
+            // }
 
             eventSubmit.classList.remove('cursor-not-allowed', 'opacity-50');
           }
 
-          form.addEventListener('input', () => allowButton(submitButton));
-          addEventForm.addEventListener('input', checkIfEventFormIsValid);
+          const checkForNewIsValid = () => {
+            for (const input of newPlace.getElementsByTagName('input')) {
+              if (input.value === '' || document.getElementById("place").value === "Place of the event") return;
+              else if (! document.getElementById("new-place-submit").classList.contains("cursor-not-allowed")) {
+                document.getElementById("new-place-submit").classList.add('cursor-not-allowed', 'opacity-50');
+              }
+            }
 
+            document.getElementById("new-place-submit").classList.remove('cursor-not-allowed', 'opacity-50');
+          }
+
+          const toggleNewPLace = () => {
+            if (document.getElementById("place").value != '-2') {
+              if (! newPlace.classList.contains("hidden")) newPlace.classList.add("hidden");
+            } else {
+              if (newPlace.classList.contains("hidden")) newPlace.classList.remove("hidden");
+            }
+          }
+
+          form.addEventListener('input', () => allowButton(submitButton));
+          newPlace.addEventListener('input', checkForNewIsValid);
+          addEventForm.addEventListener('input', checkIfEventFormIsValid);
       </script>
     </t:page>
   </body>
