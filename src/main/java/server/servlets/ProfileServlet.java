@@ -21,7 +21,7 @@ import java.util.Stack;
  * @author Ribeyrolles Matthieu
  * 03/01/2021, 14:19
  */
-public class ProfileServlet extends HttpServlet implements FormsMethods {
+public class ProfileServlet extends HttpServlet implements FormsMethods, ServletMethods {
   /*------------------------------------------------------------------
                               Methods
    ------------------------------------------------------------------*/
@@ -35,7 +35,15 @@ public class ProfileServlet extends HttpServlet implements FormsMethods {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     final Object loggedAttribute = req.getSession().getAttribute("logged");
 
-    if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) req.getRequestDispatcher("resources/views/pages/profile.jsp").forward(req, resp);
+    if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) {
+      try {
+        this.loadNotifications((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getSession().getAttribute("id").toString()));
+      } catch (SQLException sqlException) {
+        sqlException.printStackTrace();
+      }
+
+      req.getRequestDispatcher("resources/views/pages/profile.jsp").forward(req, resp);
+    }
     else resp.sendRedirect(req.getContextPath());
   }
 

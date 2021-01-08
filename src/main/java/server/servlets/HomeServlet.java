@@ -1,16 +1,19 @@
 package server.servlets;
 
+import server.database.UserBean;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * @author Ribeyrolles Matthieu
  * 02/01/2021, 23:38
  */
-public class HomeServlet extends HttpServlet {
+public class HomeServlet extends HttpServlet implements ServletMethods {
   /*------------------------------------------------------------------
                               Methods
    ------------------------------------------------------------------*/
@@ -24,7 +27,15 @@ public class HomeServlet extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     final Object loggedAttribute = req.getSession().getAttribute("logged");
 
-    if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) req.getRequestDispatcher("resources/views/pages/home.jsp").forward(req, resp);
+    if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) {
+      try {
+        this.loadNotifications((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getSession().getAttribute("id").toString()));
+      } catch (SQLException sqlException) {
+        sqlException.printStackTrace();
+      }
+
+      req.getRequestDispatcher("resources/views/pages/home.jsp").forward(req, resp);
+    }
     else resp.sendRedirect("register");
   }
 

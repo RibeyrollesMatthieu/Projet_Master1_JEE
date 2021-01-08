@@ -42,6 +42,9 @@
       $.get("notifications?erase=" + id);
       reloadNotifs();
     }
-    const reloadNotifs = () => $("#notifs").load(window.location.href + " #notifs");
+    const reloadNotifs = () => {
+        $("#notifs").load(window.location.href + " #notifs");
+        $("#notif-badge").load(window.location.href + " #notif-badge");
+    }
   </script>
 </html>

@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * @author Ribeyrolles Matthieu
  * 07/01/2021, 22:22
  */
-public class NotificationsServlet extends HttpServlet {
+public class NotificationsServlet extends HttpServlet implements ServletMethods {
   /*------------------------------------------------------------------
                               Methods
    ------------------------------------------------------------------*/
@@ -25,32 +25,6 @@ public class NotificationsServlet extends HttpServlet {
   // getters
   // setters
   // private
-
-  private void loadNotifications(UserBean currentUSer, int id) throws SQLException {
-    ResultSet set = SQLConnector.getInstance().doRequest(String.format(
-      "SELECT * from notifications WHERE owner = %d " +
-      "OR concernedUser = %d;", id, id), false);
-
-    while(set.next()) {
-      NotificationBean notificationBean = new NotificationBean();
-
-      notificationBean.setTitle(set.getString("title"));
-      notificationBean.setContent(set.getString("content"));
-      notificationBean.setId(set.getInt("id"));
-
-      ResultSet tempsSet = SQLConnector.getInstance().getUser(set.getInt("concernedUser"));
-      tempsSet.next();
-      UserBean userBean = new UserBean();
-      userBean.setFirstname(tempsSet.getString("firstname"));
-      userBean.setLastname(tempsSet.getString("lastname"));
-      userBean.setCovided(tempsSet.getBoolean("covided"));
-      userBean.setId(tempsSet.getInt("id"));
-
-      notificationBean.setConcernedUser(userBean);
-
-      currentUSer.addNotification(notificationBean);
-    }
-  }
 
   private void eraseNotif(UserBean currentUser, int id) {
     try {
@@ -72,22 +46,15 @@ public class NotificationsServlet extends HttpServlet {
 
       assert req.getSession().getAttribute("id") != null : "Cannot look at friends because id is null";
 
-      for (String name : req.getParameterMap().keySet()) {
-        System.out.println(req.getParameter(name));
-      }
       try {
-        if (req.getParameter("erase") != null) {
-          this.eraseNotif((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getParameter("erase")));
-        } else {
-          this.loadNotifications(
-            (UserBean) req.getSession().getAttribute("user"),
-            Integer.parseInt(req.getSession().getAttribute("id").toString())
-          );
-
-          req.getRequestDispatcher("resources/views/pages/notifications.jsp").forward(req, resp);
-        }
-      } catch (SQLException e) {
-        System.err.println("an error has occurew when loading the notifications");
+        this.loadNotifications((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getSession().getAttribute("id").toString()));
+      } catch (SQLException sqlException) {
+        sqlException.printStackTrace();
+      }
+      if (req.getParameter("erase") != null) {
+        this.eraseNotif((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getParameter("erase")));
+      } else {
+        req.getRequestDispatcher("resources/views/pages/notifications.jsp").forward(req, resp);
       }
     }
 

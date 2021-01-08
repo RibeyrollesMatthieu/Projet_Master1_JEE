@@ -2,6 +2,7 @@ package server.servlets;
 
 import server.database.Hashing;
 import server.database.SQLConnector;
+import server.database.UserBean;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -74,7 +75,7 @@ public class LoginServlet extends HttpServlet implements FormsMethods, ServletMe
           req.getSession().setAttribute("id", set.getInt("id"));
           req.getSession().setAttribute("logged", true);
           this.createUserBean(req);
-
+          this.loadNotifications((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getSession().getAttribute("id").toString()));
           resp.sendRedirect(req.getContextPath());
         } else {
           System.err.println("Password incorrect");

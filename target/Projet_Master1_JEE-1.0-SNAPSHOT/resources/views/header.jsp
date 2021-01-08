@@ -7,20 +7,33 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
-  <header>
+  <header id="notif-badge">
     <nav class="flex py-3 px-4 fixed top-0 left-0 right-0 items-center justify-between
           bg-gray-300 dark:bg-gray-900 z-50">
-
 
       <a href="${pageContext.request.contextPath}/profile" class="text-xl text-bold hover:text-yellow-700">
         <i class="fa fa-lg fas fa-user"></i>
       </a>
 
-      <a href="${pageContext.request.contextPath}/notifications" class="text-xl text-bold hover:text-yellow-700">
+      <a href="${pageContext.request.contextPath}/notifications" class="text-xl text-bold hover:text-yellow-700 relative">
         <i class="fa fa-lg far fa-comment"></i>
+
+        <c:choose>
+          <c:when test="${sessionScope.user.getNotificationsBean().size() == 0}">
+
+          </c:when>
+
+          <c:otherwise>
+          <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+              ${sessionScope.user.getNotificationsBean().size()}
+          </span>
+          </c:otherwise>
+        </c:choose>
       </a>
+
 
       <a href="${pageContext.request.contextPath}/"
          class="text-2xl text-bold"> Covid Tracker </a>

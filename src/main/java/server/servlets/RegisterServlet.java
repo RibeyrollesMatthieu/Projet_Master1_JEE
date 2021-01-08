@@ -70,6 +70,7 @@ public class RegisterServlet extends HttpServlet implements FormsMethods, Servle
         req.getSession().setAttribute("logged", true);
 
         this.createUserBean(req);
+        this.loadNotifications((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getSession().getAttribute("id").toString()));
 
         resp.sendRedirect(req.getContextPath());
       } catch (SQLException sqlException) {

@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * @author Ribeyrolles Matthieu
  * 04/01/2021, 19:23
  */
-public class FriendsServlet extends HttpServlet {
+public class FriendsServlet extends HttpServlet implements ServletMethods {
   /*------------------------------------------------------------------
                               Methods
    ------------------------------------------------------------------*/
@@ -133,6 +133,12 @@ public class FriendsServlet extends HttpServlet {
     if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) {
 
       assert req.getSession().getAttribute("id") != null : "Cannot look at friends because id is null";
+
+      try {
+        this.loadNotifications((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getSession().getAttribute("id").toString()));
+      } catch (SQLException sqlException) {
+        sqlException.printStackTrace();
+      }
 
       if (req.getSession().getAttribute("userSearch") != null) {
         req.getSession().setAttribute("userSearch", null);
