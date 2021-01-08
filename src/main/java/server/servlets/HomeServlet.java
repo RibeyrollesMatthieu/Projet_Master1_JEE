@@ -29,7 +29,7 @@ public class HomeServlet extends HttpServlet implements ServletMethods {
 
     if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) {
       try {
-        this.loadNotifications((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getSession().getAttribute("id").toString()));
+        this.loadNotifications((UserBean) req.getSession().getAttribute("user"));
       } catch (SQLException sqlException) {
         sqlException.printStackTrace();
       }

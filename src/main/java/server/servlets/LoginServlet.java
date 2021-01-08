@@ -75,7 +75,7 @@ public class LoginServlet extends HttpServlet implements FormsMethods, ServletMe
           req.getSession().setAttribute("id", set.getInt("id"));
           req.getSession().setAttribute("logged", true);
           this.createUserBean(req);
-          this.loadNotifications((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getSession().getAttribute("id").toString()));
+          this.loadNotifications((UserBean) req.getSession().getAttribute("user"));
           resp.sendRedirect(req.getContextPath());
         } else {
           System.err.println("Password incorrect");

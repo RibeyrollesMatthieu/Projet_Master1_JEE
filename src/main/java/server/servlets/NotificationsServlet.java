@@ -1,6 +1,5 @@
 package server.servlets;
 
-import server.database.NotificationBean;
 import server.database.SQLConnector;
 import server.database.UserBean;
 
@@ -9,8 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.invoke.StringConcatFactory;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -47,7 +44,7 @@ public class NotificationsServlet extends HttpServlet implements ServletMethods 
       assert req.getSession().getAttribute("id") != null : "Cannot look at friends because id is null";
 
       try {
-        this.loadNotifications((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getSession().getAttribute("id").toString()));
+        this.loadNotifications((UserBean) req.getSession().getAttribute("user"));
       } catch (SQLException sqlException) {
         sqlException.printStackTrace();
       }

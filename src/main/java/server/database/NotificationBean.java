@@ -9,7 +9,9 @@ import java.util.Objects;
 public class NotificationBean {
   private String title;
   private String content;
+  private String status;
   private UserBean concernedUser;
+  private UserBean ownerUser;
   private int id;
 
   /*------------------------------------------------------------------
@@ -33,6 +35,12 @@ public class NotificationBean {
   public int getId() {
     return id;
   }
+  public String getStatus() {
+    return status;
+  }
+  public UserBean getOwnerUser() {
+    return ownerUser;
+  }
 
   public void setConcernedUser(UserBean concernedUser) {
     this.concernedUser = concernedUser;
@@ -45,6 +53,12 @@ public class NotificationBean {
   }
   public void setId(int id) {
     this.id = id;
+  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
+  public void setOwnerUser(UserBean ownerUser) {
+    this.ownerUser = ownerUser;
   }
 
   @Override

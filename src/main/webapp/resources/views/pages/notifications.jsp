@@ -29,7 +29,10 @@
               <t:notification
                 title="${notification.getTitle()}"
                 content="${notification.getContent()}"
-                id="${notification.getId()}" />
+                id="${notification.getId()}"
+                status="${notification.getStatus()}"
+                ownerId="${notification.getOwnerUser().getId()}"
+                concernedId="${notification.getConcernedUser().getId()}"/>
             </c:forEach>
           </c:otherwise>
         </c:choose>
@@ -42,9 +45,18 @@
       $.get("notifications?erase=" + id);
       reloadNotifs();
     }
+
     const reloadNotifs = () => {
         $("#notifs").load(window.location.href + " #notifs");
         $("#notif-badge").load(window.location.href + " #notif-badge");
+    }
+
+    const cancelRequestNotifButton = document.getElementById("cancel-request-notif-button");
+
+    const cancelFriendRequestFromNotif = (idOwner, idConcerned, idNotif) => {
+      postCancelRequest(idOwner)
+        .then(() => eraseNotif(idNotif))
+        .catch( () =>  console.log("Cannot post the cancel friend request."));
     }
   </script>
 </html>

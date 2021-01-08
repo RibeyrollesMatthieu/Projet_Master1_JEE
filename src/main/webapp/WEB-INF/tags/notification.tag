@@ -4,6 +4,10 @@
 <%@attribute name="title" required="true" %>
 <%@attribute name="content" required="true" %>
 <%@attribute name="id" required="true" %>
+<%@attribute name="status" required="true" %>
+<%@attribute name="ownerId" required="true" %>
+<%@attribute name="concernedId" required="true" %>
+
 
 <div class="max-w-sm rounded overflow-hidden shadow-lg shadow-white bg-gray-300 m-4">
   <div class="px-6 py-4">
@@ -14,9 +18,15 @@
     <p class="text-gray-700 text-base"> ${content} </p>
   </div>
 
-  <div class="px-6 py-4">
-    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#photography</span>
-    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#travel</span>
-    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">#winter</span>
+  <div class="px-6 py-4 text-right">
+    <c:choose>
+      <c:when test="${status.equals('sentRequest')}">
+        <a id="cancel-request-notif-button" onclick="cancelFriendRequestFromNotif(${ownerId}, ${concernedId}, ${id})" class="cursor-pointer inline-block bg-red-200 hover:bg-red-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ml-auto"> Cancel </a>
+      </c:when>
+    </c:choose>
+
+    <a id="cancel-request-notif-button" class="cursor-pointer inline-block bg-red-200 hover:bg-red-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ml-auto"> ${ownerId} </a>
+    <a id="cancel-request-notif-button" class="cursor-pointer inline-block bg-red-200 hover:bg-red-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ml-auto"> ${concernedId} </a>
+
   </div>
 </div>

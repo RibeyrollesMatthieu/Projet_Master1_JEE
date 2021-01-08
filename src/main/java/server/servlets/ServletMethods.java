@@ -13,9 +13,12 @@ import java.sql.SQLException;
  * 03/01/2021, 23:44
  */
 public interface ServletMethods {
-  default void loadNotifications(UserBean currentUSer, int id) throws SQLException {
+  default void loadNotifications(UserBean currentUSer) throws SQLException {
     ResultSet set = SQLConnector.getInstance().doRequest(String.format(
-      "SELECT * from notifications WHERE concernedUser = %d;", id, id), false);
+      "SELECT * from notifications WHERE concernedUser = %d;", currentUSer.getId()), false);
+
+    System.out.println(currentUSer);
+    System.out.println(currentUSer.getId());
 
     while(set.next()) {
       NotificationBean notificationBean = new NotificationBean();
@@ -23,16 +26,17 @@ public interface ServletMethods {
       notificationBean.setTitle(set.getString("title"));
       notificationBean.setContent(set.getString("content"));
       notificationBean.setId(set.getInt("id"));
+      notificationBean.setStatus(set.getString("status"));
+      notificationBean.setConcernedUser(currentUSer);
 
-      ResultSet tempsSet = SQLConnector.getInstance().getUser(set.getInt("concernedUser"));
-      tempsSet.next();
-      UserBean userBean = new UserBean();
-      userBean.setFirstname(tempsSet.getString("firstname"));
-      userBean.setLastname(tempsSet.getString("lastname"));
-      userBean.setCovided(tempsSet.getBoolean("covided"));
-      userBean.setId(tempsSet.getInt("id"));
+      ResultSet tempSet = SQLConnector.getInstance().getUser(set.getInt("owner"));
+      tempSet.next();
+      UserBean ownerBean = new UserBean();
+      ownerBean.setFirstname(tempSet.getString("firstname"));
+      ownerBean.setLastname(tempSet.getString("lastname"));
+      ownerBean.setId(tempSet.getInt("id"));
 
-      notificationBean.setConcernedUser(userBean);
+      notificationBean.setOwnerUser(ownerBean);
 
       currentUSer.addNotification(notificationBean);
     }
@@ -49,6 +53,8 @@ public interface ServletMethods {
       userBean.setLastname(rs.getString("lastname"));
       userBean.setBdate(rs.getDate("birthdate"));
       userBean.setCovided(rs.getBoolean("covided"));
+      userBean.setId(Integer.parseInt(req.getSession().getAttribute("id").toString()));
+
       if (Integer.parseInt(req.getSession().getAttribute("id").toString()) == rs.getInt("id"))
         userBean.setPassword(rs.getString("password"));
 

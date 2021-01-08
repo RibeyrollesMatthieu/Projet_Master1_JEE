@@ -135,7 +135,7 @@ public class FriendsServlet extends HttpServlet implements ServletMethods {
       assert req.getSession().getAttribute("id") != null : "Cannot look at friends because id is null";
 
       try {
-        this.loadNotifications((UserBean) req.getSession().getAttribute("user"), Integer.parseInt(req.getSession().getAttribute("id").toString()));
+        this.loadNotifications((UserBean) req.getSession().getAttribute("user"));
       } catch (SQLException sqlException) {
         sqlException.printStackTrace();
       }
