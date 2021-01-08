@@ -44,10 +44,10 @@
                               firstname="${userSearchResult.getFirstname()}"
                               lastname="${userSearchResult.getLastname()}"
                               id="${userSearchResult.getId()}"
-                              isFriend="true" />
+                              isFriend="true"
+                              img="${userSearchResult.getProfilePic()}"/>
                           </c:when>
 
-<%--                          FIXME: contains not working--%>
                           <c:when test="${sessionScope.user.isPending(userSearchResult)}">
                             <c:set var="isfromMe" value="${sessionScope.user.getPendingStatus(userSearchResult)}" />
                             <t:friendCard
@@ -56,6 +56,7 @@
                               id="${userSearchResult.getId()}"
                               isFriend="false"
                               requestFromMe="${isfromMe}"
+                              img="${userSearchResult.getProfilePic()}"
                               />
                           </c:when>
 
@@ -65,7 +66,8 @@
                               lastname="${userSearchResult.getLastname()}"
                               id="${userSearchResult.getId()}"
                               isFriend="false"
-                              searchResult="true" />
+                              searchResult="true"
+                              img="${userSearchResult.getProfilePic()}"/>
                           </c:otherwise>
                         </c:choose>
                       </c:forEach>
@@ -80,6 +82,7 @@
                               lastname="${pendingBean.getLastname()}"
                               id="${pendingBean.getId()}"
                               isFriend="false"
+                              img="${pendingBean.getProfilePic()}"
                               requestFromMe='${pendingBean.isRequestSentFromCurrentUser()}'/>
                           </c:forEach>
                         </c:when>
@@ -91,7 +94,8 @@
                               lastname="${friendBean.getLastname()}"
                               id="${friendBean.getId()}"
                               covided="${friendBean.isCovided()}"
-                              isFriend="true" />
+                              isFriend="true"
+                              img="${friendBean.getProfilePic()}"/>
                           </c:forEach>
                         </c:otherwise>
                       </c:choose>

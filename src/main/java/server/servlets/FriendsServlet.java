@@ -49,6 +49,7 @@ public class FriendsServlet extends HttpServlet implements ServletMethods {
         friend.setLastname(friendSet.getString("lastname"));
         friend.setCovided(friendSet.getBoolean("covided"));
         friend.setEmail(friendSet.getString("email"));
+        friend.setProfilePic(friendSet.getString("profilePic"));
 
         user.addFriend(friend);
       }
@@ -63,6 +64,7 @@ public class FriendsServlet extends HttpServlet implements ServletMethods {
         pending.setLastname(pendingSet.getString("lastname"));
         pending.setEmail(pendingSet.getString("email"));
         pending.setRequestSentFromCurrentUser(true);
+        pending.setProfilePic(pendingSet.getString("profilePic"));
 
         user.addPending(pending);
       }
@@ -77,6 +79,7 @@ public class FriendsServlet extends HttpServlet implements ServletMethods {
         pending.setLastname(pendingSet.getString("lastname"));
         pending.setEmail(pendingSet.getString("email"));
         pending.setRequestSentFromCurrentUser(false);
+        pending.setProfilePic(pendingSet.getString("profilePic"));
 
         user.addPending(pending);
       }
@@ -101,7 +104,7 @@ public class FriendsServlet extends HttpServlet implements ServletMethods {
       if (friendsSearchResult != null) friendsSearchResult.close();
 
       friendsSearchResult = SQLConnector.getInstance().doRequest(
-        "SELECT id, firstname, lastname, email FROM users WHERE " +
+        "SELECT * FROM users WHERE " +
         "id <> " + Integer.parseInt(req.getSession().getAttribute("id").toString()) +
         " AND (firstname LIKE '%" + currentSearch + "%' " +
         "OR lastname LIKE '%" + currentSearch + "%');", false);
@@ -114,7 +117,7 @@ public class FriendsServlet extends HttpServlet implements ServletMethods {
             user.setId(friendsSearchResult.getInt("id"));
             user.setFirstname(friendsSearchResult.getString("firstname"));
             user.setLastname(friendsSearchResult.getString("lastname"));
-
+            user.setProfilePic(friendsSearchResult.getString("profilePic"));
             friendsSearchBean.addUser(user);
           }
         }

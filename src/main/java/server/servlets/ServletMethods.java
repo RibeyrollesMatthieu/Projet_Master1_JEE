@@ -51,6 +51,7 @@ public interface ServletMethods {
       userBean.setBdate(rs.getDate("birthdate"));
       userBean.setCovided(rs.getBoolean("covided"));
       userBean.setId(Integer.parseInt(req.getSession().getAttribute("id").toString()));
+      userBean.setProfilePic(rs.getString("profilePic"));
 
       if (Integer.parseInt(req.getSession().getAttribute("id").toString()) == rs.getInt("id"))
         userBean.setPassword(rs.getString("password"));

@@ -1,9 +1,11 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@tag description="Base template for all the app pages" pageEncoding="UTF-8" %>
 <%@attribute name="firstname" required="true" %>
 <%@attribute name="lastname" required="true" %>
 <%@attribute name="covided" required="false" %>
 <%@attribute name="isFriend" required="true" %>
 <%@attribute name="id" required="true" %>
+<%@attribute name="img" required="true" %>
 <%@attribute name="requestFromMe" required="false" %>
 <%@attribute name="searchResult" required="false" %>
 
@@ -12,7 +14,7 @@
     <td class="px-6 py-4 whitespace-nowrap">
       <div class="flex items-center">
         <div class="flex-shrink-0 h-10 w-10">
-          <img class="h-10 w-10 rounded-full noselect" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=60" alt="">
+          <img id="${img}" class="h-10 w-10 rounded-full noselect" src="${img}" alt="${img}">
         </div>
 
         <div class="ml-4">

@@ -55,11 +55,11 @@ public abstract class Scripts {
 
       try {
         SQLConnector.getInstance().doRequest(String.format(
-          "INSERT INTO users(%s, %s, %s, %s, %s) " +
-          "VALUES('%s','%s','%s','%s','%s');",
-          "email", "firstname", "lastname", "password", "birthdate",
-  
-          email, firstname, lastname, Hashing.getSaltedHash(generatePassword(50)), createRandomDate(1900, 2019)), true);
+          "INSERT INTO users(%s, %s, %s, %s, %s, %s) " +
+          "VALUES('%s','%s','%s','%s','%s', '%s');",
+          "email", "firstname", "lastname", "password", "birthdate", "profilePic",
+          email, firstname, lastname, Hashing.getSaltedHash(generatePassword(50)), createRandomDate(1900, 2019),
+          String.format("https://picsum.photos/id/%d/200/300", new Random().nextInt(1084))), true);
       } catch (Exception e) {
 //        e.printStackTrace();
       }

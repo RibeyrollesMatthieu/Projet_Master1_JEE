@@ -15,6 +15,7 @@ public class UserBean {
   private HashSet<UserBean> friends;
   private HashSet<PendingBean> pending;
   private HashSet<NotificationBean> notificationsBean;
+  private String profilePic;
 
   /*------------------------------------------------------------------
                               Methods
@@ -43,6 +44,12 @@ public class UserBean {
   public boolean isCovided() { return isCovided; }
   public HashSet<UserBean> getFriends() { return friends; }
   public HashSet<NotificationBean> getNotificationsBean() { return notificationsBean; }
+  public void setProfilePic(String profilePic) {
+    this.profilePic = profilePic;
+  }
+  public String getProfilePic() {
+    return profilePic;
+  }
 
   public boolean isPendingId(int id) {
     for (Iterator<PendingBean> it = this.pending.iterator(); it.hasNext(); ) {

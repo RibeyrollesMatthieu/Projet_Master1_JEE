@@ -18,7 +18,7 @@
       <div class="text-center w-3/4 m-auto">
         <h1 class="text-7xl uppercase text-yellow-700 my-24 noselect"> My profile </h1>
 
-        <div id="content" class="flex flex-wrap content-center justify-between items-center mt-9 space-x-3">
+        <div id="form-content" class="flex flex-wrap content-center justify-between items-center mt-9 space-x-3">
           <h2 class="p-5 text-3xl flex-1 w-full">
             You can change any information you'd like to!
             Or <a class="text-yellow-700 hover:underline" href="${pageContext.request.contextPath}/logout"> disconnect. </a>
@@ -29,19 +29,15 @@
             <div class="mb-4">
               <t:input id="firstname" type="text" placeholder="Firstname&nbsp;" autofocus='true' label="true" value="${sessionScope.user.getFirstname()}" length="${sessionScope.columnsLength.get('firstname')}"/>
             </div>
-
             <div class="mb-4">
               <t:input id="lastname" type="text" placeholder="Lastname&nbsp;" label="true" value="${sessionScope.user.getLastname()}" length="${sessionScope.columnsLength.get('lastname')}"/>
             </div>
-
             <div class="mb-4">
               <t:input id="password" type="password" placeholder="New password&nbsp;" label="true" label_text="Password&nbsp;" length="${sessionScope.columnsLength.get('password')}"/>
             </div>
-
             <div class="mb-4">
               <t:input id="email" type="email" placeholder="Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" label="true" value="${sessionScope.user.getEmail()}" length="${sessionScope.columnsLength.get('email')}"/>
             </div>
-
             <div class="mb-4">
               <t:input id="date" type="text" placeholder="Birthdate&nbsp;" label="true" value="${sessionScope.user.getBdate()}" length="${sessionScope.columnsLength.get('birthdate')}"/>
             </div>
@@ -50,6 +46,15 @@
               Save modifications
             </button>
           </form>
+        </div>
+
+        <div>
+          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
+          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
+          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
+          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
+          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
+          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
         </div>
       </div>
 
