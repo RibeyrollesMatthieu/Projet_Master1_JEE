@@ -15,7 +15,6 @@ const deleteFriend = (id) => {
     .catch(() => console.log("Cannot post the delete friend request."));
 }
 const cancelFriendRequest = (id) => {
-  console.log(id);
   postCancelRequest(id)
     .then(reloadFriendSearch)
     .catch(() => console.log("Cannot post the cancel friend request."));

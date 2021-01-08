@@ -44,6 +44,15 @@ public class UserBean {
   public HashSet<UserBean> getFriends() { return friends; }
   public HashSet<NotificationBean> getNotificationsBean() { return notificationsBean; }
 
+  public boolean isPendingId(int id) {
+    for (Iterator<PendingBean> it = this.pending.iterator(); it.hasNext(); ) {
+      if (it.next().getId() == id) {
+        return true;
+      }
+    }
+
+    return false;
+  }
   public boolean isPending(UserBean userBean) {
     for (Iterator<PendingBean> it = this.pending.iterator(); it.hasNext(); ) {
       if (it.next().equals(userBean)) {

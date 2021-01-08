@@ -1,6 +1,7 @@
 package server.servlets;
 
 import server.database.SQLConnector;
+import server.database.UserBean;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -84,7 +85,9 @@ public class RelationServlet extends HttpServlet {
     }
   }
 
-  private void acceptFriendRequest(int id1, int id2) {
+  private void acceptFriendRequest(HttpServletRequest req, int id1, int id2) {
+    if (! ((UserBean) req.getSession().getAttribute("user")).isPendingId(id2)) return;
+
     try {
       SQLConnector.getInstance().doRequest(String.format(
         "UPDATE friendship " +
@@ -123,7 +126,7 @@ public class RelationServlet extends HttpServlet {
     }
 
     if (req.getParameter("accept") != null) {
-      this.acceptFriendRequest(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("accept")));
+      this.acceptFriendRequest(req, Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("accept")));
     }
 
     if (req.getParameter("cancel") != null) {

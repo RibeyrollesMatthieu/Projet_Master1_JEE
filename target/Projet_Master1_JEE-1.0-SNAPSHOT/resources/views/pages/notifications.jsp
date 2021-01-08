@@ -51,10 +51,14 @@
         $("#notif-badge").load(window.location.href + " #notif-badge");
     }
 
-    const cancelRequestNotifButton = document.getElementById("cancel-request-notif-button");
-
     const cancelFriendRequestFromNotif = (idOwner, idConcerned, idNotif) => {
       postCancelRequest(idOwner)
+        .then(() => eraseNotif(idNotif))
+        .catch( () =>  console.log("Cannot post the cancel friend request."));
+    }
+
+    const acceptFriendRequestFromNotif = (idOwner, idConcerned, idNotif) => {
+      postAcceptRequest(idOwner)
         .then(() => eraseNotif(idNotif))
         .catch( () =>  console.log("Cannot post the cancel friend request."));
     }
