@@ -105,11 +105,16 @@ public class RelationServlet extends HttpServlet {
 
     if (req.getParameter("delete") != null) {
       this.removeFriend(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("delete")));
+
+      try {
+        NotifcationsSender.sendDeletedFriend(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("delete")));
+      } catch (SQLException sqlException) {
+        sqlException.printStackTrace();
+      }
     }
 
     if (req.getParameter("accept") != null) {
       try {
-
         this.acceptFriendRequest(req, Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("accept")));
         NotifcationsSender.sendAcceptedFriendRequestNotification(Integer.parseInt(req.getSession().getAttribute("id").toString()), Integer.parseInt(req.getParameter("accept")));
       } catch (SQLException sqlException) {

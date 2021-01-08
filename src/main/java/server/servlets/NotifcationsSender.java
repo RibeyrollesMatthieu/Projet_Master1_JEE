@@ -41,6 +41,30 @@ public abstract class NotifcationsSender {
   }
 
   // public
+  public static void sendDeletedFriend(int from, int to) throws SQLException {
+    ResultSet fromNameSet = SQLConnector.getInstance().doRequest("SELECT firstname, lastname FROM users WHERE id = " + from, false);
+    fromNameSet.next();
+
+    String title = String.format("%s %s deleted you from his/her friendlist :(", fromNameSet.getString("firstname"), fromNameSet.getString("lastname").toUpperCase());
+    String content = String.format(
+      "%s deleted you from his/her friendlist. You are no longer friends, and will not see each other recent events.",
+      fromNameSet.getString("firstname")
+    );
+
+    insertNotif(title, content, to, from, "");
+
+    ResultSet toNameSet = SQLConnector.getInstance().doRequest("SELECT firstname, lastname FROM users WHERE id = " + to, false);
+    toNameSet.next();
+
+    title = String.format("You deleted %s from your friendlist.", toNameSet.getString("firstname"));
+    content = String.format(
+      "You deleted from %s %s from your friendlist. You are no longer friends, and will not see each other recent events.",
+      toNameSet.getString("firstname"), toNameSet.getString("lastname")
+    );
+
+    insertNotif(title, content, from ,to, "");
+  }
+
   public static void sendCovidedMessageToFriends(UserBean currentUser) throws SQLException {
       for (UserBean userBean : currentUser.getFriends()) {
         sendCovidedMessage(true, userBean.getId());
