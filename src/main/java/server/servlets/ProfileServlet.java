@@ -1,9 +1,6 @@
 package server.servlets;
 
-import server.database.DbConnector;
-import server.database.Hashing;
-import server.database.SQLConnector;
-import server.database.UserBean;
+import server.database.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,9 +10,8 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Stack;
 
 /**
  * @author Ribeyrolles Matthieu
@@ -29,15 +25,42 @@ public class ProfileServlet extends HttpServlet implements FormsMethods, Servlet
   // getters
   // setters
   // private
+  private void loadEventsFor(UserBean userBean, int id) throws SQLException {
+    ResultSet set = SQLConnector.getInstance().doRequest(String.format("SELECT * FROM events WHERE owner = '%d'", id), false);
+
+    while(set.next()) {
+      EventBean event = new EventBean();
+      event.setId(set.getInt("id"));
+      event.setTitle(set.getString("title"));
+      event.setDate(set.getDate("date"));
+      event.setStart(set.getTime("start"));
+      event.setEnd(set.getTime("end"));
+      event.setIdPlace(set.getInt("id_place"));
+      event.setContent(set.getString("content"));
+      event.setImage(set.getString("image"));
+
+      UserBean owner = new UserBean();
+      ResultSet ownerSet = SQLConnector.getInstance().getUser(set.getInt("owner"));
+      ownerSet.next();
+      owner.setFirstname(ownerSet.getString("firstname"));
+      owner.setLastname(ownerSet.getString("lastname"));
+      owner.setProfilePic(ownerSet.getString("profilePic"));
+
+      event.setOwner(owner);
+      userBean.addEvent(event);
+    }
+  }
   // public
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     final Object loggedAttribute = req.getSession().getAttribute("logged");
 
+
     if (loggedAttribute != null && Boolean.parseBoolean(loggedAttribute.toString())) {
       try {
         this.loadNotifications((UserBean) req.getSession().getAttribute("user"));
+        this.loadEventsFor((UserBean) req.getSession().getAttribute("user"), ((UserBean) req.getSession().getAttribute("user")).getId());
       } catch (SQLException sqlException) {
         sqlException.printStackTrace();
       }

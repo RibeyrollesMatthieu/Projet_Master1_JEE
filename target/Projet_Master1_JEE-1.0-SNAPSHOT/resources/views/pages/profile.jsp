@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
   <jsp:include page="../../../includer.jsp"> <jsp:param name="title" value="Profile"/></jsp:include>
@@ -48,13 +49,17 @@
           </form>
         </div>
 
-        <div>
-          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
-          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
-          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
-          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
-          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
-          <t:eventCard imageSrc="https://picsum.photos/200/300"/>
+        <h1 class="text-7xl uppercase text-yellow-700 my-24 noselect"> My events <i class="cursor-pointer hover:underline fas fa fa-plus"></i> </h1>
+
+        <div class="flex flex-wrap justify-center align-center mt-9 space-y-3">
+          <c:forEach items="${sessionScope.user.getEvents()}" var="event">
+            <t:eventCard
+              imageSrc="${event.getImage()}"
+              title="${event.getTitle()}"
+              content="${event.getContent()}"
+              date="${event.getDate()}"
+            />
+          </c:forEach>
         </div>
       </div>
 

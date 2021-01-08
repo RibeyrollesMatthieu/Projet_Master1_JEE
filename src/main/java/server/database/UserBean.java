@@ -16,7 +16,7 @@ public class UserBean {
   private HashSet<PendingBean> pending;
   private HashSet<NotificationBean> notificationsBean;
   private String profilePic;
-
+  private HashSet<EventBean> events;
   /*------------------------------------------------------------------
                               Methods
    ------------------------------------------------------------------*/
@@ -38,9 +38,7 @@ public class UserBean {
   public int getId() {
     return id;
   }
-  public Date getBdate() {
-    return bdate;
-  }
+  public Date getBdate() { return bdate; }
   public boolean isCovided() { return isCovided; }
   public HashSet<UserBean> getFriends() { return friends; }
   public HashSet<NotificationBean> getNotificationsBean() { return notificationsBean; }
@@ -49,6 +47,9 @@ public class UserBean {
   }
   public String getProfilePic() {
     return profilePic;
+  }
+  public HashSet<EventBean> getEvents() {
+    return events;
   }
 
   public boolean isPendingId(int id) {
@@ -113,9 +114,12 @@ public class UserBean {
   public void addFriend(UserBean userBean) { this.friends.add(userBean); }
   public void addPending(PendingBean pendingBean) { this.pending.add(pendingBean); }
   public void addNotification(NotificationBean notificationBean) { this.notificationsBean.add(notificationBean); }
+  public void addEvent(EventBean eventBean) { this.events.add(eventBean); }
+  public void setEvents(HashSet<EventBean> events) {
+    this.events = events;
+  }
 
-
-  // private
+// private
   // public
 
   @Override
@@ -150,5 +154,6 @@ public class UserBean {
     this.friends = new HashSet<>();
     this.pending = new HashSet<>();
     this.notificationsBean = new HashSet<>();
+    this.events = new HashSet<>();
   }
 }
