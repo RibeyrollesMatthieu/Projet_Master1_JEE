@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
  */
 public interface FormsMethods {
 
+
   default boolean isFormCorrectlyWritten(HttpServletRequest req) throws ServletException, IOException {
     Enumeration<String> params = req.getParameterNames();
     while (params.hasMoreElements()) {
@@ -32,11 +33,9 @@ public interface FormsMethods {
       }
     }
 
-    if (req.getParameter("email") != null) {
-      if (! isEmailGood(req.getParameter("email"))) {
-        System.err.println("Email is not correct.");
-        return false;
-      }
+    if (! isEmailGood(req.getParameter("email"))) {
+      System.err.println("Email is not correct.");
+      return false;
     }
 
     return true;

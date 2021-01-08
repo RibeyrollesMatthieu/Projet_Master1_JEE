@@ -110,7 +110,7 @@ public class FriendsServlet extends HttpServlet implements ServletMethods {
         "OR lastname LIKE '%" + currentSearch + "%');", false);
 
         while (friendsSearchResult.next()) {
-          if (friendsSearchResult.getInt("id") > 1) {
+          if (friendsSearchResult.getInt("id") > 0) {
             UserBean user = new UserBean();
 
             user.setEmail(friendsSearchResult.getString("email"));

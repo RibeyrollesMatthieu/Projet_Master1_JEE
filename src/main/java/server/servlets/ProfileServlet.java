@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -85,34 +86,36 @@ public class ProfileServlet extends HttpServlet implements FormsMethods, Servlet
   }
 
   private void updateProfile(HttpServletRequest req, Map<String, String[]> params) throws SQLException {
-    final int ID = (int) req.getSession().getAttribute("id");
+    final int ID = Integer.parseInt(req.getSession().getAttribute("id").toString());
     final UserBean user = (UserBean) req.getSession().getAttribute("user");
 
     try {
-      if (! params.get("firstname")[0].equals(user.getFirstname())){
-        user.setFirstname(params.get("firstname")[0]);
-        update("users", "firstname", params.get("firstname")[0], ID);
+      if (req.getParameter("firstname").trim().length() != 0 && !req.getParameter("firstname").trim().equals(user.getFirstname())){
+        user.setFirstname(req.getParameter("firstname").trim());
+        update("users", "firstname", req.getParameter("firstname"), ID);
       }
 
-      if (! params.get("lastname")[0].equals(user.getLastname())){
-        user.setLastname(params.get("lastname")[0]);
-        update("users", "lastname", params.get("lastname")[0], ID);
+      if (req.getParameter("lastname").trim().length() != 0 && ! req.getParameter("lastname").trim().equals(user.getLastname())){
+        user.setLastname(req.getParameter("lastname").trim());
+        update("users", "lastname", req.getParameter("lastname"), ID);
       }
 
-      if (! Hashing.check(params.get("password")[0], user.getPassword())){
-        user.setPassword(Hashing.getSaltedHash(params.get("password")[0]));
-        update("users", "password", Hashing.getSaltedHash(params.get("password")[0]), ID);
+      if (req.getParameter("password").trim().length() != 0 && ! Hashing.check(req.getParameter("password"), user.getPassword())){
+        user.setPassword(Hashing.getSaltedHash(req.getParameter("password")));
+        update("users", "password", Hashing.getSaltedHash(req.getParameter("password")), ID);
       }
 
-      if (! params.get("email")[0].equals(user.getEmail())){
-        user.setEmail(params.get("email")[0]);
-        update("users", "email", params.get("email")[0], ID);
+      if (req.getParameter("email").trim().length() != 0 && ! req.getParameter("email").trim().equals(user.getEmail())){
+        user.setEmail(req.getParameter("email").trim());
+        update("users", "email", req.getParameter("email"), ID);
       }
 
-      if (! params.get("date")[0].equals(user.getBdate().toString())){
-        String pattern = "yyyy-MM-dd";
-        user.setBdate(new SimpleDateFormat(pattern).parse(params.get("date")[0])); //FIXME get only year month and day
-        update("users", "birthdate", params.get("date")[0], ID);
+      if (req.getParameter("date").trim().length() != 0 && ! req.getParameter("date").trim().equals(user.getBdate())){
+        update("users", "birthdate", req.getParameter("date").trim(), ID);
+
+        ResultSet rs = SQLConnector.getInstance().doRequest("SELECT birthdate FROm users WHERE id = " + user.getId(), false);
+        rs.next();
+        user.setBdate(rs.getDate("birthdate"));
       }
     } catch (Exception sqlException) {
       sqlException.printStackTrace();
@@ -147,15 +150,11 @@ public class ProfileServlet extends HttpServlet implements FormsMethods, Servlet
         resp.sendRedirect(req.getRequestURI());
       }
     } else {
-      if (this.isFormCorrectlyWritten(req)) {
-        try {
-          this.updateProfile(req, req.getParameterMap());
-          resp.sendRedirect(req.getRequestURI());
-        } catch (Exception e /*| SQLException sqlException*/) {
-          System.err.println("Unable to update account");
-          resp.sendRedirect(req.getRequestURI());
-        }
-      } else {
+      try {
+        this.updateProfile(req, req.getParameterMap());
+        resp.sendRedirect(req.getRequestURI());
+      } catch (Exception e /*| SQLException sqlException*/) {
+        System.err.println("Unable to update account");
         resp.sendRedirect(req.getRequestURI());
       }
     }
