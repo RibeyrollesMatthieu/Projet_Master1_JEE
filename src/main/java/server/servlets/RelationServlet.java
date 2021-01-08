@@ -50,6 +50,20 @@ public class RelationServlet extends HttpServlet {
       "INSERT INTO notifications(title, content, concernedUser, owner) " +
       "VALUES('%s', '%s', '%d', '%d')", title, content, to, from
     ), true);
+
+    ResultSet toNameSet = SQLConnector.getInstance().doRequest("SELECT firstname, lastname FROM users WHERE id = " + to, false);
+    toNameSet.next();
+
+    title = "A friend request has been sent:";
+    content = String.format(
+      "You sent a friend request to %s %s. You can still cancel it, or just wait for an answer :)",
+      toNameSet.getString("firstname"), toNameSet.getString("lastname")
+    );
+
+    SQLConnector.getInstance().doRequest(String.format(
+      "INSERT INTO notifications(title, content, concernedUser, owner) " +
+        "VALUES('%s', '%s', '%d', '%d')", title, content, from, to
+    ), true);
   }
 
   private void declineRequest(int id1, int id2) {

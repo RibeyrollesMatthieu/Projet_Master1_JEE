@@ -10,6 +10,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
+<%--FIXME: when updating, cannot activate covid button--%>
   <header id="notif-badge">
     <nav class="flex py-3 px-4 fixed top-0 left-0 right-0 items-center justify-between
           bg-gray-300 dark:bg-gray-900 z-50">

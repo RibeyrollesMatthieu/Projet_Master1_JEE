@@ -15,8 +15,7 @@ import java.sql.SQLException;
 public interface ServletMethods {
   default void loadNotifications(UserBean currentUSer, int id) throws SQLException {
     ResultSet set = SQLConnector.getInstance().doRequest(String.format(
-      "SELECT * from notifications WHERE owner = %d " +
-        "OR concernedUser = %d;", id, id), false);
+      "SELECT * from notifications WHERE concernedUser = %d;", id, id), false);
 
     while(set.next()) {
       NotificationBean notificationBean = new NotificationBean();
